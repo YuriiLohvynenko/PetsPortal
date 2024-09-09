@@ -1,0 +1,26 @@
+<!-- Category Show Page -->
+<h1 align="center"><%= @category.name %></h1>
+<div class="border" style="margin:20%; margin-top:5%; padding:3%;">
+  <!-- Subcategory Creation Form -->
+  <h2>Add Subcategory</h2>
+  <%= form_for [@category, @subcategory] do |f| %>
+    <!-- Subcategory Name -->
+    <div class="form-group">
+      <%= f.label :name, "Subcategory Name" %>
+      <%= f.text_field :name, id: "subcategory-name", class: "form-control" %>
+    </div>
+
+    <!-- Submit Button -->
+    <%= f.submit "Create Subcategory", class: "btn btn-primary" %>
+  <% end %>
+
+
+  <!-- List of Subcategories -->
+  <h2>Subcategories</h2>
+  <ul>
+    <% @category.subcategories.each do |subcategory| %>
+      <li><%= subcategory.name %></li>
+    <% end %>
+  </ul>
+</div>
+

@@ -1,0 +1,2 @@
+class ProhibitedWord < ApplicationRecord
+end

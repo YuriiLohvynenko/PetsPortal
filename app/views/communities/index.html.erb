@@ -1,0 +1,182 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-12 col-lg-3">
+      <%= render "shared/sidebar" %>
+    </div>
+    <div class="col-12 col-lg-9 communities">
+      <h4 class="d-flex align-items-center gap-2 fw-bold"><i class="fa fa-paw text-main"></i> Myコミュニティ一覧</h4>
+      <div class="mt-4">
+        <ul class="d-flex mtabs" id="myTab" role="tablist">
+          <li class="mtab" role="presentation">
+            <%= link_to 'すべて', all_content_path, class: "nav-link", id: "pots-tab", 'aria-controls': "posts", 'aria-selected': "false" %>
+          </li>
+          <li class="mtab active fw-bold" role="presentation">
+            <a class="nav-link active text-main " id="communities-tab" data-bs-toggle="tab" href="#communities" role="tab" aria-controls="communities" aria-selected="false">コミュニティ</a>
+          </li>
+          <li class="mtab" role="presentation">
+            <%= link_to 'トピック', all_posts_path, class: "nav-link", id: "pots-tab", 'aria-controls': "posts", 'aria-selected': "false" %>
+          </li>
+          <li class="mtab" role="presentation">
+            <%= link_to 'イベント', all_events_path, class: "nav-link", id: "events-tab", 'aria-controls': "events", 'aria-selected': "false" %>
+          </li>
+        </ul>
+        <div class="tab-pane fade show active mt-4" id="communities" role="tabpanel" aria-labelledby="communities-tab">
+          <div class="">
+            <%= form_tag(communities_path, method: :get) do %>
+              <div class="d-flex justify-content-start align-items-center flex-md-row justify-content-md-between mt-4">
+                <div class="input-group border border-dark rounded" style="max-width: 200px">
+                  <%= text_field_tag :query, params[:query], class: "form-control", placeholder: "検索する" %>
+                  <div class="input-group-btn fw-bold">
+                    <button class="btn bg-transparent fw-bold" type="submit">
+                      <i class="fa fa-search"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-5 col-md-2 m-1 d-none">
+                  <%= submit_tag "検索", class: "btn btn-warning" %>
+                </div>
+                <div class="overlay">
+                  <button type="button" class="btn bg-transparent border border-dark" id="filterButton">検索条件変更</button>
+                  <div id="filterBox" class="border rounded end-0 mt-2 p-3 shadow" style="display: none; width: 300px">
+                    <label class="d-flex gap-2 align-items-center mb-2">
+                      <input type="checkbox" class="form-control-check">
+                      タイトルのみで検索
+                    </label>
+                    <div class="form-group d-flex gap-2 mb-2">
+                      <label for="categorySelect" style="width: 40%;">並び替え</label>
+                      <%= select_tag(:category, options_for_select([["カテゴリーを選択してください", ""], *Category.all.map { |c| [c.name, c.id] }], params[:category]), class: "form-select", id: "categorySelect") %>
+                    </div>
+                    <div class="form-group d-flex gap-2">
+                      <label for="orderBySelect" style="width: 40%;">カテゴリ</label>
+                      <%= select_tag(:order_by, options_for_select([["並び替え", ""], ["更新日", "updated_date"],["参加人数", "participants"]], params[:order_by]), class: "form-select", id: "orderBySelect") %>
+                    </div>
+                    <div class="mt-3">
+                      <%= button_tag(type: :submit, class: "btn text-white fw-bold w-100 bg-main") do %>
+                        適用する
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-5 col-md-2 m-1 d-none">
+                  <%= link_to "+作成する", new_community_path, class: "btn btn-primary" %>
+                </div>
+              </div>
+            <% end %>
+            <div class="my-4 mb-5">
+              <ul class="d-flex justify-content-center gap-3 align-items-center mpagination mt-5">
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
+                <li>4</li>
+                <li>...</li>
+                <li>20</li>
+              </ul>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                コミュニティの検索結果：<%= @communities.size %>件 <span class="ms-5">検索条件:タイトル+更新</span>
+              </div>
+              <div><label>[1] 1件~6件を表示</label></div>
+            </div>
+            <div class="mt-4">
+              <div class="rounded mb-4 border border-dark" style="overflow: hidden">
+                <div class="bg-light-grey px-3 py-2 d-flex justify-content-between align-items-center border-bottom border-dark rounded-t">
+                  <span class="fw-bold text-decoration-underline">コミュニティタイトルテキストが入ります</span>
+                  <button class="btn rounded-0 text-white fw-bold bg-main d-flex gap-1 align-items-center">
+                    <i class="fa fa-plus"></i> 参加する
+                  </button>
+                </div>
+                <div class="p-3">
+                  <div class="d-flex gap-3">
+                    <div class="bg-light-grey d-flex justify-content-center align-items-center" style="width: 120px; height: 120px; aspect-ratio: 1/1">
+                      <i class="fa fa-image fa-3x text-white"></i>
+                    </div>
+                    <div>
+                      <p>
+                        コ が入ります。テキストが入ります。テキストが入ります。テキストが入ストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキス ト･･･ ミュニティ説明テキストがはいります。テキストが入ります。テキストが入ります。テキ
+                      </p>
+                      <div class="mt-2">
+                        <div class="d-flex align-items-center gap-3">
+                          <div class="d-flex align-items-center gap-2">
+                            <span class="text-white bg-main d-flex justify-content-center align-items-center rounded" style="width: 25px; height: 25px; aspect-ratio: 1/1">UP</span>
+                            <span>12分前</span>
+                          </div>
+                          <div class="d-flex align-items-center gap-2">
+                            <i class="fa fa-user text-light-main"></i>
+                            <span>23人が参加中</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="rounded mb-4 border border-dark" style="overflow: hidden">
+                <div class="bg-light-grey px-3 py-2 d-flex justify-content-between align-items-center border-bottom border-dark rounded-t">
+                  <span class="fw-bold text-decoration-underline">コミュニティタイトルテキストが入ります</span>
+                  <button class="btn rounded-0 text-white fw-bold bg-main d-flex gap-1 align-items-center">
+                    <i class="fa fa-plus"></i> 参加する
+                  </button>
+                </div>
+                <div class="p-3">
+                  <div class="d-flex gap-3">
+                    <div class="bg-light-grey d-flex justify-content-center align-items-center" style="width: 120px; height: 120px; aspect-ratio: 1/1">
+                      <i class="fa fa-image fa-3x text-white"></i>
+                    </div>
+                    <div>
+                      <p>
+                        コ が入ります。テキストが入ります。テキストが入ります。テキストが入ストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキス ト･･･ ミュニティ説明テキストがはいります。テキストが入ります。テキストが入ります。テキ
+                      </p>
+                      <div class="mt-2">
+                        <div class="d-flex align-items-center gap-3">
+                          <div class="d-flex align-items-center gap-2">
+                            <span class="text-white bg-main d-flex justify-content-center align-items-center rounded" style="width: 25px; height: 25px; aspect-ratio: 1/1">UP</span>
+                            <span>12分前</span>
+                          </div>
+                          <div class="d-flex align-items-center gap-2">
+                            <i class="fa fa-user text-light-main"></i>
+                            <span>23人が参加中</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row row-cols-1 row-cols-lg-4 m-0 p-0">
+                <% @communities.each do |community| %>
+                  <div class="col p-0 mt-3 border-end">
+                    <div class="card m-4">
+                      <% if community.image.attached? %>
+                        <img src="<%= url_for(community.image) %>" class="card-img-top" alt="...">
+                      <% end %>
+                      <% if current_user == community_owner(community) %>
+                        <a href="<%= edit_community_path(community) %>" class="btn btn-admin-edit position-absolute top-0 end-0 m-2">編集・管理</a>
+                      <% end %>
+                      <div class="card-body">
+                        <h5 class="card-title"><%= link_to community.title, community_path(community) %></h5>
+                        <p class="card-text"><%= community.description.truncate(100) %></p>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+            <div class="my-4 mb-5">
+              <ul class="d-flex justify-content-center gap-3 align-items-center mpagination mt-5">
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
+                <li>4</li>
+                <li>...</li>
+                <li>20</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>

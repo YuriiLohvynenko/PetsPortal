@@ -1,0 +1,23 @@
+<div class="container m-4">
+    <div class="row">
+        <div class="col-md-4">
+            <h2> 友達 </h2>
+            <ul class="list-group">
+            <% current_user.friendships.each do |friendship| %>
+                <% user = User.with_deleted.find_by(id: friendship.friend_id) %>
+                <% if user && !user.deleted_at %>
+                <a href="<%= message_path(user) %>">
+                    <li class="list-group-item">
+                        <%= display_pet_or_username(user) %>
+                    </li>
+                </a>
+                <% elsif %>
+                    <li class="list-group-item">
+                        <%= display_pet_or_username(user, user.pets.find_by(profile_display: true)) %>
+                    </li>
+                <% end %>
+            <% end %>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+<div class ="container">
+  <h1 class="mb-4">会員一覧</h1>
+  <div class="row">
+    <% @users.each do |user| %>
+      <% if user != current_user %>
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                <h5 class="card-title mb-0"><%= display_pet_or_username(user) %></h5>
+                <% if current_user.sent_friend_requests.exists?(recipient: user) %>
+                  <span class="badge bg-warning text-dark ms-2">承認待ち</span>
+                <% elsif current_user.received_friend_requests.exists?(sender: user) %>
+                  <%= link_to "承認", accept_friend_request_path(current_user.received_friend_requests.find_by(sender: user)), method: :put, class: "btn btn-success ms-3" %>
+                  <%= link_to "拒否", reject_friend_request_path(current_user.received_friend_requests.find_by(sender: user)), method: :delete, class: "btn btn-danger ms-3" %>
+                <% elsif current_user.friendships.exists?(friend: user) %>
+                  <span class="badge bg-primary text-light ms-2">友達</span>
+                <% else %>
+                  <%= form_with(model: current_user.sent_friend_requests.build, url: friend_requests_path,:html => { :style => 'display: inline;' }) do |f| %>
+                    <%= f.hidden_field :recipient_id, value: user.id %>
+                    <%= f.submit "友達申請", class: "btn btn-primary" %>
+                  <% end %>
+                <% end %>
+              </div>
+              <%= link_to "プロフィールを見る", user_path(user), class: "btn btn-success mt-2"  %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  <h2 class="mt-4 mb-4">友達</h2>
+  <div class="row">
+    <% current_user.friends.each do |friend| %>
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title"><%= display_pet_or_username(friend) %></h5>
+            <%= link_to "メッセージ", message_path(friend), class: "btn btn-primary"  %>
+            <%= link_to "友達をやめる", friendship_path(friend), method: :delete, class: "btn btn-danger" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

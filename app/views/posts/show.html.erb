@@ -1,0 +1,94 @@
+<h2 class="text-center mt-5">トピック詳細</h2>
+<div style="position: relative;" class="mx-auto d-block" width="90%">
+    <% if @post.background_image.attached? %>
+        <img src="<%= url_for(@post.background_image) %>" class="mx-auto d-block" width="100%" height="500px">
+    <% else %>
+        <img src="https://placehold.co/600x400/png" class="mx-auto d-block" width="100%" height="500px">
+    <% end %>
+    <% if current_user == @post.user %>
+        <%= link_to '編集', edit_post_image_path(@post), class: "btn btn-outline-success", style: "position: absolute; top: 10px; right: 10px;" %>
+    <% end %>
+</div>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12 col-lg-3">
+            <div class="card event-card">
+                <% if @post.image.attached? %>
+                  <img src="<%= url_for(@post.image) %>" class="card-img-top">
+                <% end %>
+                <div class="card-body pl-0">
+                    <p class="card-text"><%= @post.title %></p>
+                    <p class="card-text mt-3">作成者</p>
+                    <div>
+                        <% if display_pet_image(@user) %>
+                            <img src="<%= display_pet_image(@user) %>" class="img-thumbnail rounded-circle pic" alt="..." width="50">
+                        <% end %>
+                        <span class="card-text mt-3">
+                            <% if @user && !@user.deleted_at %>
+                                <%= link_to display_pet_or_username(@user), user_path(@user) %>
+                            <% else %>
+                                <%= display_pet_or_username(@user) %>
+                            <% end %>
+                        </span>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <% if current_user == @post.user %>
+                            <%= link_to '削除', community_post_path(@community, @post), method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger mr-2" %>
+                            <%= link_to '編集', edit_community_post_path(@community, @post), class:"btn btn-success mr-2" %>
+                        <% elsif current_user %>
+                            <%= link_to 'いいね取り消し', community_post_unlike_path(@community, @post), method: :delete, id: "post-unlike-#{@post.id}", class: 'btn btn-danger', remote: true, style: "display: #{current_user.likes?(@post) ? 'block': 'none'}" %>
+                            <%= link_to 'いいね', community_post_like_path(@community, @post), method: :post, id: "post-like-#{@post.id}", class: 'btn btn-primary', remote: true, style: "display: #{current_user.likes?(@post) ? 'none' : 'block'}" %>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-9">
+            <div class="container border">
+                <div class="row">
+                    <div class="col-12 text-bg-primary text-black">
+                        <p class="mb-0">トピック詳細</p>
+                    </div>
+                    <div class="col-12 mt-4">
+                        <p class="mt-4"><%= simple_format(@post.body) %></p>
+                    </div>
+                </div>
+            </div>
+            <div class="container border mt-5">
+                <div class="row">
+                    <div class="col-12 text-bg-primary text-black">
+                        <p class="mb-0">コメント (<%= @post.comments.count%>)</p>
+                    </div>
+                    <div class="col-12 mt-4 p-0">
+                        <% @comments.each_with_index do |comment, index| %>
+                            <%= render partial: 'comments/comment', locals: { comment: comment, community: @community, comment_index: index + 1 + (((params[:page] || 1).to_i - 1) * 10) } %>
+                        <% end %>
+                        <% if community_member(@community) || current_user == community_owner(@community) %>
+                            <div class="card bg-body-secondary">
+                                <div class="card-body">
+                                    <% if current_user %>
+                                        <%= form_for [@community, @post, @post.comments.build] do |f| %>
+                                        <div class="d-flex">
+                                            <% if current_user.pets.first && current_user.pets.first.image.attached? %>
+                                                <img src="<%= display_pet_image(current_user) %>" class="rounded-circle" style="width: 50px; height: 50px;" alt="...">
+                                            <% end %>
+                                            <div class="ml-2" style="position: relative; flex: 1;">
+                                                <%= f.text_area :content, class: "form-control", rows: 4, placeholder: "コメントを入力してください" %>
+                                                <button type="submit" class="btn btn-primary" style="position: absolute; bottom: 5px; right: 5px;">
+                                                    <i class="fas fa-arrow-right"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <% end %>
+                                    <% end %>
+                                </div>
+                            </div>
+                        <% end %>
+                    </div>
+                    <%= will_paginate @comments %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

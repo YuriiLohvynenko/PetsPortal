@@ -1,0 +1,61 @@
+<div class="container" style="margin-top: 3rem">
+  <h4 class="d-flex align-items-center justify-content-center gap-2 fw-bold mb-4"><i class="fa fa-paw text-main"></i> 新規会員登録</h4>
+  <div class="bg-main mt-4 px-4 py-2 fw-bold text-white">
+    ※エラー項目があります(パスワード)
+  </div>
+  <div class="mx-auto mt-4" style="max-width: 400px; ">
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+      <%= render "users/shared/error_messages", resource: resource %>
+      <div class="field mb-3">
+        <%= f.label :名前, class:"form-label fw-bold" %><br />
+        <%= f.text_field :name, autofocus: true, autocomplete: "name", class:"form-control" %>
+      </div>
+      <div class="field mb-3">
+        <%= f.label :メールアドレス, class:"form-label fw-bold" %><br />
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control" %>
+      </div>
+      <div class="field mb-3">
+        <%= f.label :年齢, class:"form-label fw-bold" %><br />
+        <%= f.number_field :age, autofocus: true, autocomplete: "age", class:"form-control" %>
+      </div>
+      <div class="field mb-3">
+        <%= f.label :パスワード, class:"form-label fw-bold" %>
+        <% if @minimum_password_length %>
+          <em>(<%= @minimum_password_length %> 文字以上)</em>
+        <% end %><br />
+        <%= f.password_field :password, autocomplete: "new-password", class:"form-control" %>
+        <div class="mt-2 text-main fw-bold">
+          ※エラー項目があります(パスワード)
+        </div>
+      </div>
+      <div class="field mb-3">
+        <%= f.label :パスワードの確認, class:"form-label fw-bold" %><br />
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class:"form-control" %>
+      </div>
+    </div>
+    <div class="mx-auto" style="max-width: 600px">
+      <div class="mb-5">
+        <small>
+          利用規約、<span class="text-decoration-underline">プライバシーポリシー</span>をご確認の上、「確認へ進む」 をタップしてください。
+        </small>
+      </div>
+      <div class="d-flex flex-column justify-content-center align-items-center gap-2">
+        <div class="actions mb-3 mx-auto" style="width: 250px">
+          <%= f.submit "新規登録", class:"btn btn-lg fw-bold text-white w-100 bg-main" %>
+        </div>
+        <a href="mb-5">アカウントをお持ちの方はこちら</a>
+      </div>
+    <% end %>
+    <%= render "users/shared/links" %>
+  </div>
+  <div class="border border-dark my-5"></div>
+  <div class="mx-auto">
+    <h5 class="fw-bold text-center">SNSログイン</h5>
+    <div class="mt-4 d-flex flex-column align-items-center justify-content-center gap-3 mx-auto"  style="width: 250px">
+      <button class="btn btn-lg fw-bold text-white w-100 bg-primary">Facebookでログイン</button>
+      <button class="btn btn-lg fw-bold text-white w-100 bg-success">LINEでログイン</button>
+      <button class="btn btn-lg fw-bold text-white w-100 bg-primary">Twitterでログイン</button>
+      <button class="btn btn-lg fw-bold text-white w-100 bg-danger">Googleでログイン</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<div class="container" style="max-width: 400px; margin-top: 3rem">
+  <h4 class="d-flex align-items-center justify-content-center gap-2 fw-bold mb-4"><i class="fa fa-paw text-main"></i> ログイン</h4>
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name),local: true ) do |f| %>
+    <%flash.each do |name, msg|%>
+      <%= content_tag :div, msg, :id => "flash_#{name}", class: "text-danger" %>
+    <%end%>
+    <div class="field mb-4">
+      <%= f.label :メールアドレス, class:"form-label fw-bold" %><br />
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control" %>
+    </div>
+    <div class="field mb-4">
+      <%= f.label :パスワード, class:"form-label fw-bold" %><br />
+      <%= f.password_field :password, autocomplete: "current-password", class:"form-control" %>
+    </div>
+    <% if devise_mapping.rememberable? %>
+      <div class="mb-4 d-flex align-items-center gap-2">
+        <%= f.check_box :remember_me, class:"form-label mt-2" %>
+        <%= f.label :ログイン状態を保持する %>
+      </div>
+    <% end %>
+    <div class="actions text-center">
+      <%= f.submit "ログインする", class:"btn btn-lg bg-main text-white fw-bold px-5" %>
+    </div>
+  <% end %>
+  <%= render "users/shared/links" %>
+</div>

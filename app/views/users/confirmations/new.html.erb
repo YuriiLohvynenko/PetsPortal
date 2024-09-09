@@ -1,0 +1,24 @@
+<div class="container" style="margin-top: 3rem">
+  <h4 class="d-flex align-items-center justify-content-center gap-2 fw-bold mb-4"><i class="fa fa-paw text-main"></i> 確認メールを再送信する</h4>
+  <div  class="mt-4">
+    <div class="text-center mx-auto" style="max-width: 600px">
+      <small class="d-block" style="line-height: 2">
+        パスワードを忘れてしまった場合、以下から再設定することが可能です。 登録時に使用したメールアドレスを入力してください。
+      </small>
+    </div>
+  </div>
+  <div class="mt-5 mx-auto" style="max-width: 400px">
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+      <%= render "users/shared/error_messages", resource: resource %>
+      <div class="field">
+        <%= f.label :メールアドレス, class:'fw-bold mb-2' %><br />
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
+      </div>
+      <div class="actions mt-5">
+        <div class="mx-auto" style="width: 250px">
+          <%= f.submit "再送信する", class: 'btn btn-large text-white w-100 fw-bold bg-main' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

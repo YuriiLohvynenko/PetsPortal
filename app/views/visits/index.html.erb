@@ -1,0 +1,15 @@
+<h1 align="center">足あと</h1>
+<div class="container notifications-container p-3">
+    <table>
+        <% @visits.each do |visit| %>
+        <tr>
+            <td><%= visit.created_at.strftime('%Y-%m-%d') %></td>
+            <td><%= visit.created_at.strftime('%H:%M:%S') %></td>
+            <td>
+                <%= image_tag display_pet_image(visit.visitor), class: 'small-profile-image' %>
+                <%= link_to display_pet_or_username(visit.visitor), visit_read_path(visit) %>
+            </td>
+        </tr>
+        <% end %>
+    </table>
+</div>

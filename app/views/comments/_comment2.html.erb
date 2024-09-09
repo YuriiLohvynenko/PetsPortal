@@ -1,0 +1,62 @@
+<div class="card border-0 m-4">
+    <div class="row">
+        <div class="card-body col-1 pr-1">
+            <% if comment.user.pets.first && comment.user.pets.first.image.attached? %>
+                <img src="<%= url_for(comment.user.pets.first.image) %>" class="img-thumbnail rounded-circle pic" width="80" alt="...">
+            <% end %>
+        </div>
+        <div class="card-body col-11 pl-1">
+            <div class="d-flex justify-content-between align-items-center">
+                <p class="card-title"><%= display_pet_or_username(comment.user) %></p>
+                <% if community_member(@community) || current_user ==community_owner(@community) %>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal-<%= comment.id %>" style="margin-right: 10%;">
+                        返信する
+                    </button>
+                <% end %>
+            </div>
+            <span class="card-subtitle mb-2 text-body-secondary"><%= comment.created_at.strftime('%Y-%m-%d')  %></span>
+            <p class="card-text">
+            <%= link_to "Re: ##{parent_comment_index}", comment_path(parent_comment, community_id: community.id) %>
+            <%= simple_format(comment.content) %>
+            </p>
+            <span class="card-text">
+                <% if current_user %>
+                    <%= link_to comment_comment_unlike_path(comment, comment), method: :delete, id: "comment-unlike-#{comment.id}", style: "display: #{current_user.likes?(comment) ? 'inline' : 'none'}", remote: true do %>
+                    <i class="fas fa-heart"></i>
+                    <% end %>
+                    <%= link_to comment_comment_like_path(comment, comment, community_id: @community.id, format: :js), method: :post, id: "comment-like-#{comment.id}", style: "display: #{current_user.likes?(comment) ? 'none' : 'inline'}", remote: true do %>
+                    <i class="fas fa-heart"></i>
+                    <% end %>
+                <% end %>
+                いいね (<span id= "comment-likes-count-<%= comment.id %>"><%= comment.likes.count %></span>)</span>
+            <span class="card-text"><i class="fas fa-comments"></i> コメント (<%= comment.comments.count %>)</span>
+        </div>
+    </div>
+</div>
+<hr>
+<!-- Modal -->
+<div class="modal fade " id="exampleModal-<%= comment.id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">返信する</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+         <p> #<%= parent_comment_index %>への返信への返信</p>
+        <%= simple_format(comment.content) %>
+        <%= form_for([comment, comment.comments.build]) do |f| %>
+            <div class="d-flex">
+                <div class="ml-2" style="position: relative; flex: 1;">
+                <%= f.text_area :content, class: "form-control", rows: 4, placeholder: "コメントを入力" %>
+                <button type="submit" class="btn btn-primary" style="position: absolute; bottom: 5px; right: 5px;">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                </div>
+            </div>
+            <%= f.hidden_field :community_id, value: community.id %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

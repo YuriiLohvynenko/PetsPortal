@@ -1,0 +1,65 @@
+<h2 class="text-center mt-5"><%= @community.title %>のトピック</h2>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12 col-lg-3">
+            <%= render "shared/sidebar" %>
+        </div>
+
+        <div class="col-12 col-lg-9 events">
+            <% if community_member(@community) || current_user ==community_owner(@community) %>
+                <div class="row">
+                    <div class="col-12">
+                        <%= link_to "トピックを作成する", new_community_post_path(@community), class:"btn btn-primary mb-3"  %>
+                    </div>
+                </div>
+            <% end %>
+
+            <div class="row border">
+                <div class="row mt-2">
+                    <div class="col-5 col-md-3 m-1">
+                        <%= form_tag(community_posts_path(@community), method: :get) do %>
+                            <%= text_field_tag(:query, params[:query], class: "form-control", placeholder: "検索") %>
+                    </div>
+
+                    <div class="col-5 col-md-2 m-1">
+                        <%= submit_tag "検索", class: "btn btn-warning" %>
+                        <% end %>
+                    </div>
+
+                    <!-- もし追加の検索条件が必要な場合はここに配置 -->
+                </div>
+            </div>
+
+            <div class="col-12 col-md-12 m-1">
+                <p>トピックの検索結果：<%= @posts.size %>件</p>
+            </div>
+
+            <div class="row row-cols-1 row-cols-lg-4 m-0 p-0">
+                <% @posts.each do |post| %>
+                    <div class="col-12 col-md-12 m-1">
+                        <div class="card mb-4">
+                            <% if post.image.attached? %>
+                                <img src="<%= url_for(post.image) %>" class="card-img-top" alt="...">
+                            <% end %>
+                            <div class="card-body">
+                                <h5 class="card-title"><%= link_to post.title, community_post_path(@community, post) %></h5>
+                                <p class="card-text"><%= post.body %></p>
+                                <p class="card-text">作成者: <%= display_pet_or_username(post.user) %></p>
+                                <p class="card-text">作成日: <%= post.created_at.strftime('%Y-%m-%d') %></p>
+
+                                <% if current_user == post.user %>
+                                    <%= link_to '削除', community_post_path(@community, post), method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger mr-2" %>
+                                    <%= link_to '編集', edit_community_post_path(@community, post), class:"btn btn-success mr-2" %>
+                                <% end %>
+                                <p class="card-text">いいね: <%= post.likes.count %></p>
+                                <p class="card-text">コメント: <%= post.comments.count %></p>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>
+<%= will_paginate @posts %>

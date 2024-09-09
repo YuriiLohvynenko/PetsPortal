@@ -1,0 +1,35 @@
+<div class="border" style="margin:20%; margin-top:5%; padding:3%;">
+  <h1>日記投稿</h1>
+  <%= form_with(model: [ @user, @diary ]) do |form| %>
+    <% if diary.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(diary.errors.count, "error") %> prohibited this diary from being saved:</h2>
+
+        <ul>
+          <% diary.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="field mb-3">
+      <%= form.label :タイトル, class:"form-label" %>
+      <%= form.text_field :title, class:"form-control" %>
+    </div>
+
+    <div class="field mb-3">
+      <%= form.label :内容, class:"form-label" %>
+      <%= form.text_area :content, rows: "5", class:"form-control" %>
+    </div>
+
+    <div class="field mb-3">
+      <%= form.label :画像, class:"form-label" %>
+      <%= form.file_field :image %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit "保存", class:"btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

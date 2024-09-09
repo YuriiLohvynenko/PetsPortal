@@ -1,0 +1,140 @@
+<div class="container mt-4">
+  <div class="row">
+  <p class="card-text text-center">
+    <% if @diary.user == current_user %>
+      <%= link_to "#{display_pet_or_username(@diary.user)}さんの日記", my_diaries_path %>
+    <% else %>
+      <%= link_to "#{display_pet_or_username(@diary.user)}さんの日記", user_diaries_path(@diary.user) %>
+    <% end %>
+   <div class="col-md-2"> <!-- Left sidebar starts here -->
+   <% today = Date.today %>
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title"><%= today.strftime('%Y年%m月') %></h5>
+    <% first_day_of_month = today.at_beginning_of_month %>
+    <% last_day_of_month = today.at_end_of_month %>
+    <% first_day_of_calendar = first_day_of_month.beginning_of_week(:monday) %>
+    <% last_day_of_calendar = last_day_of_month.end_of_week(:sunday) %>
+    <% first_day_of_calendar.step(last_day_of_calendar, 1).each_slice(7) do |week| %>
+      <div class="row">
+        <% week.each do |day| %>
+          <div class="col-md-1 small-font no-wrap ">
+            <% if day.month == today.month %>
+              <% if @diary.user.has_diary_in?(day.year, day.month, day.day) %>
+                <% if @diary.user.has_diary_in?(day.year, day.month, day.day) %>
+                  <%= link_to day.day, (@diary.user == current_user ? my_diaries_path(year: day.year, month: day.month, day: day.day) : user_diaries_path(@diary.user, year: day.year, month: day.month, day: day.day)) %>
+                <% else %>
+                  <%= day.day.to_s.rjust(2, '0') %>
+                <% end %>
+
+
+              <% else %>
+                <%= day.day.to_s.rjust(2, '0') %>
+              <% end %>
+            <% else %>
+              <!-- Display nothing or you could add a non-breaking space '&nbsp;' for layout purposes -->
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+      <% @diary.user.diary_years.each do |year| %>
+        <div class="card mb-1 small-font no-wrap">
+          <div class="card-body">
+            <h5 class="card-title"><%= year %>年</h5>
+            <% (1..12).each_slice(4) do |quarter| %>
+              <div class="row">
+                <% quarter.each do |month| %>
+                  <div class="col-md-2">
+                    <% if @diary.user.has_diary_in?(year, month) %>
+                      <% if @diary.user.has_diary_in?(year, month) %>
+                        <%= link_to "#{month}月", (@diary.user == current_user ? my_diaries_path(year: year, month: month) : user_diaries_path(@diary.user, year: year, month: month)) %>
+                      <% else %>
+                        <%= "#{month}月" %>
+                      <% end %>
+                    <% else %>
+                      <%= "#{month}月" %>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="col-md-8">
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title"><%= @diary.title %></h5>
+          <% if @diary.image.attached? %>
+            <img src="<%= url_for(@diary.image) %>" style="width: 100px;" class="img-fluid mb-3">
+          <% end %>
+          <p class="card-text"><%= simple_format(@diary.content) %></p>
+
+          <p class="card-text">投稿者：<%= display_pet_or_username(@diary.user) %></p>
+
+          <% if current_user %>
+            <%= link_to 'Unlike', user_diary_unlike_path(@diary.user, @diary), method: :delete, id: "diary-unlike-#{ @diary.id}", class: 'btn btn-danger', style: "display: #{current_user.likes?(@diary) ? 'block' : 'none'}", remote: true %>
+            <%= link_to 'いいね', user_diary_like_path(@diary.user, @diary), method: :post, id: "diary-like-#{ @diary.id}", class: 'btn btn-primary', style: "display: #{current_user.likes?(@diary) ? 'none' : 'block'}", remote: true %>
+          <% end %>
+
+          <% if current_user == diary_owner(@diary) %>
+            <%= link_to '削除', user_diary_path(@diary.user, @diary), method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger mr-2" %>
+
+            <%= link_to '編集', edit_user_diary_path(@diary.user, @diary), class:"btn btn-success mr-2" %>
+          <% end %>
+          <%= link_to '戻る', user_diaries_path(@diary.user), class:"btn btn-secondary" %>
+
+        </div>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-body">
+          <div class="comments">
+              <h5>コメント</h5>
+              <% if flash[:alert] %>
+                <div class="alert alert-danger">
+                  <%= flash[:alert] %>
+                </div>
+              <% end %>
+
+              <% @diary.comments.each do |comment| %>
+              <div class="comment">
+                  <p><%=  simple_format(comment.content) %></p>
+                  <small><%= display_pet_or_username(comment.user) %> on <%= comment.created_at.strftime('%b %d, %Y at %I:%M %p') %></small>
+              </div>
+              <hr>
+              <% end %>
+
+              <% if current_user %>
+                <div class="new-comment">
+                  <%= form_for [@diary.user, @diary, @diary.comments.build] do |f| %>
+                  <% if @diary.comments.last && @diary.comments.last.errors.any? %>
+                    <div class="alert alert-danger">
+                      <ul>
+                        <% @diary.comments.last.errors.full_messages.each do |message| %>
+                          <li><%= message %></li>
+                        <% end %>
+                      </ul>
+                    </div>
+                  <% end %>
+                  <div class="form-group">
+                    <%= f.text_area :content, class: "form-control", rows: 3 %>
+                  </div>
+                  <%= f.submit "コメントする", class: "btn btn-primary" %>
+                  <% end %>
+                </div>
+              <% end %>
+          </div>
+        </div>
+
+      </div>
+              <p class="card-text text-center"><%= link_to "#{display_pet_or_username(@diary.user)}さんの日記", user_diaries_path(@diary.user) %></p>
+    </div>
+  </div>
+</div>

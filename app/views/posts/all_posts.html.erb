@@ -1,0 +1,80 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-12 col-lg-3">
+      <%= render "shared/sidebar" %>
+    </div>
+    <div class="col-12 col-lg-9 events">
+      <h4 class="d-flex align-items-center gap-2 fw-bold"><i class="fa fa-paw text-main"></i> トピック一覧</h4>
+      <ul class="d-flex mtabs nav-fill" id="myTab" role="tablist">
+        <li class="mtab" role="presentation">
+          <%= link_to 'すべて', all_content_path, class: "nav-link", id: "pots-tab", 'aria-controls': "posts", 'aria-selected': "false" %>
+        </li>
+        <li class="mtab" role="presentation">
+          <%= link_to 'コミュニティ', communities_path, class: "nav-link", id: "communities-tab", 'aria-controls': "communities", 'aria-selected': "false" %>
+        </li>
+        <li class="mtab active" role="presentation">
+          <a class="nav-link active text-main font-bold" id="topics-tab" data-bs-toggle="tab" href="#topics" role="tab" aria-controls="topics" aria-selected="true">トピック</a>
+        </li>
+        <li class="mtab" role="presentation">
+          <%= link_to 'イベント', all_events_path, class: "nav-link", id: "events-tab", 'aria-controls': "events", 'aria-selected': "false" %>
+        </li>
+      </ul>
+      <div class="tab-content mt-4" id="myTabContent">
+        <div class="tab-pane fade" id="all" role="tabpanel" aria-labelledby="all-tab">
+          <!-- Content for all goes here -->
+        </div>
+        <div class="tab-pane fade show active" id="topics" role="tabpanel" aria-labelledby="topics-tab">
+          <div class="">
+            <!-- 検索バーとフィルタリング部分を一つのformタグで囲む -->
+            <%= form_tag all_posts_path, method: :get do %>
+              <div class="row mt-2 d-none">
+                <div class="col-5 col-md-3 m-1">
+                  <%= text_field_tag :query, params[:query], class: "form-control", placeholder: "検索する" %>
+                </div>
+                <div class="col-5 col-md-2 m-1">
+                  <%= submit_tag "検索", class: "btn btn-warning" %>
+                </div>
+                <div class="col-5 col-md-4 m-1 overlay">
+                  <button type="button" class="btn btn-primary" id="filterButton">検索条件変更</button>
+                  <div id="filterBox" class="border" style="display: none;">
+                    <div class="form-group">
+                      <label for="categorySelect">カテゴリー:</label>
+                      <%= select_tag(:category, options_for_select([['カテゴリーを選択してください', nil]] + Category.all.map { |c| [c.name, c.id] }, params[:category].to_i), class: "form-select", id: "categorySelect") %>
+                    </div>
+                    <div class="text-end">
+                      <%= submit_tag '適用する', class: "btn btn-sm btn-primary" %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+            <div class="col-12 col-md-12 m-1 d-none">
+              <p>トピックの検索結果：<%= @posts.size %>件</p>
+            </div>
+            <div class="row row-cols-1 row-cols-lg-4 m-0 p-0">
+              <% @posts.each do |post| %>
+                <div class="col-12 col-md-12 m-1">
+                  <div class="card mb-4">
+                    <% if post.image.attached? %>
+                      <img src="<%= url_for(post.image) %>" class="card-img-top" alt="...">
+                    <% end %>
+                    <div class="card-body">
+                      <h5 class="card-title"><%= link_to post.title, community_post_path(post.community, post) %></h5>
+                      <p class="card-text"><%= post.body.truncate(100) %></p>
+                      <p class="card-text">いいね: <%= post.likes.count %></p>
+                      <p class="card-text">コメント: <%= post.comments.count %></p>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+            <%= will_paginate @posts %>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="events" role="tabpanel" aria-labelledby="events-tab">
+          <!-- Content for events goes here -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

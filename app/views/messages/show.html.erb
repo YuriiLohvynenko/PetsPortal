@@ -1,0 +1,47 @@
+<div class="container m-4">
+    <div class="row">
+        <div class="col-md-4">
+            <h2> 友達 </h2>
+            <ul class="list-group">
+                <% current_user.friendships.each do |friendship| %>
+                    <% user = User.with_deleted.find_by(id: friendship.friend_id) %>
+                    <% if user && !user.deleted_at %>
+                    <a href="<%= message_path(user) %>">
+                        <li class="list-group-item">
+                            <%= display_pet_or_username(user) %>
+                        </li>
+                    </a>
+                    <% elsif %>
+                        <li class="list-group-item">
+                            <%= display_pet_or_username(user, user.pets.find_by(profile_display: true)) %>
+                        </li>
+                    <% end %>
+                <% end %>
+            </ul>
+        </div>
+
+        <div class="col-md-8 bg-light p-4">
+            <% flash.each do |name, msg|%>
+                <%= content_tag :div, msg, :id => "flash_#{name}", class: "text-danger" %>
+            <%end%>
+
+            <h2><%=display_pet_or_username(@receiver)%>との会話</h2>
+            <div id="messages">
+                <% @messages.each do |message| %>
+                    <span class="badge bg-primary"><%= message.created_at.strftime('%b %d, %Y, %H:%M:%S') %></span>
+                    <p><%= display_pet_or_username(message.sender) %>: <%= message.text %></p>
+                <% end %>
+            </div>
+
+            <%= form_tag messages_path  do %>
+                <div>
+                    <%= text_field_tag :message, nil ,  placeholder: 'メッセージを入力してください。', class: 'form-control' %>
+                    <%= hidden_field_tag "receiver_id", @receiver.id %>
+                    <%= hidden_field_tag "sender_id", @sender.id %>
+                    <%= hidden_field_tag "chat_id", @chat_id %>
+                    <%= submit_tag "送信", data: { disable_with: false }, class: "form-control btn btn-success" %>
+                </div>
+            <% end %>
+        </div>
+    </div>
+</div>

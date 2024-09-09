@@ -1,0 +1,25 @@
+<div class="border" style="margin:20%; margin-top:5%; padding:3%;">
+  <h1>Category Information</h1>
+  <%= form_with(model: category) do |form| %>
+    <% if category.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(category.errors.count, "error") %> prohibited this category from being saved:</h2>
+
+        <ul>
+          <% category.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="field mb-3">
+      <%= form.label :name, class:"form-label" %>
+      <%= form.text_field :name, class:"form-control" %>
+    </div>
+
+    <div class="actions mb-3">
+      <%= form.submit "Save", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

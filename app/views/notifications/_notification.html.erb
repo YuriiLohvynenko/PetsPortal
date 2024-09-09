@@ -1,0 +1,192 @@
+<div class="container my-5">
+  <div class="row">
+    <div class="col-12 col-lg-3">
+      <%= render "shared/sidebar" %>
+    </div>
+    <div class="col-12 col-lg-9 communities">
+      <div class="mb-5">
+        <h4 class="d-flex align-items-center gap-2 fw-bold"><i class="fa fa-paw text-main"></i> 通知一覧</h4>
+        <div class="mt-4">
+          <div class="border rounded">
+            <div class="border-bottom px-3 py-2">
+              <small class="d-flex justify-content-between align-items-center">
+                <span>未談件数:2</span>
+                <span>1件~4件を表示</span>
+              </small>
+            </div>
+            <div class="px-3 py-2 d-flex justify-content-between border-bottom align-items-center">
+              <div class="d-flex align-items-center gap-2">
+                <i class="fa fa-comment"></i> <span class="text-decoration-underline">
+                  ○○さんから友達申請が届きました。
+                </span>
+              </div>
+              <span>09月03日 12:23</span>
+            </div>
+            <div class="px-3 py-2 d-flex justify-content-between border-bottom align-items-center">
+              <div class="d-flex align-items-center gap-2">
+                <i class="fa fa-comment"></i> <span class="text-decoration-underline">
+                  ○○さんから友達申請が届きました。
+                </span>
+              </div>
+              <span>09月03日 12:23</span>
+            </div>
+            <div class="px-3 py-2 d-flex justify-content-between border-bottom align-items-center">
+              <div class="d-flex align-items-center gap-2">
+                <i class="fa fa-comment"></i> <span class="text-decoration-underline">
+                  ○○さんから友達申請が届きました。
+                </span>
+              </div>
+              <span>09月03日 12:23</span>
+            </div>
+            <div class="px-3 py-2 d-flex justify-content-between border-bottom align-items-center">
+              <div class="d-flex align-items-center gap-2">
+                <i class="fa fa-comment"></i> <span class="text-decoration-underline">
+                  ○○さんから友達申請が届きました。
+                </span>
+              </div>
+              <span>09月03日 12:23</span>
+            </div>
+            <div class="px-3 py-2 d-flex justify-content-center align-items-center">
+              <ul class="d-flex justify-content-center align-items-center gap-2">
+                <li>&lt;</li>
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
+                <li>...</li>
+                <li>7</li>
+                <li>&gt;</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <% notifications.each do |notification| %>
+          <div class="notification">
+            <p class="notification-message"><%= link_to notification.to_notification.message, notification_path(notification) %></p>
+          </div>
+        <% end %>
+      </div>
+      <div class="mb-5">
+        <h4 class="d-flex align-items-center gap-2 fw-bold"><i class="fa fa-paw text-main"></i> メッセージ一覧</h4>
+        <div class="mt-4">
+          <div class="border rounded">
+            <div class="border-bottom px-3 py-2">
+              <small class="d-flex justify-content-between align-items-center">
+                <span>未談件数:2</span>
+                <span>1件~4件を表示</span>
+              </small>
+            </div>
+            <div class="px-3 py-2 d-flex justify-content-between border-bottom align-items-center">
+              <div class="d-flex align-items-center gap-2">
+                <i class="fa fa-comment"></i> <span class="text-decoration-underline">
+                  ○○さんから友達申請が届きました。
+                </span>
+              </div>
+              <span>09月03日 12:23</span>
+            </div>
+            <div class="px-3 py-2 d-flex justify-content-between border-bottom align-items-center">
+              <div class="d-flex align-items-center gap-2">
+                <i class="fa fa-comment"></i> <span class="text-decoration-underline">
+                  ○○さんから友達申請が届きました。
+                </span>
+              </div>
+              <span>09月03日 12:23</span>
+            </div>
+            <div class="px-3 py-2 d-flex justify-content-between border-bottom align-items-center">
+              <div class="d-flex align-items-center gap-2">
+                <i class="fa fa-comment"></i> <span class="text-decoration-underline">
+                  ○○さんから友達申請が届きました。
+                </span>
+              </div>
+              <span>09月03日 12:23</span>
+            </div>
+            <div class="px-3 py-2 d-flex justify-content-between border-bottom align-items-center">
+              <div class="d-flex align-items-center gap-2">
+                <i class="fa fa-comment"></i> <span class="text-decoration-underline">
+                  ○○さんから友達申請が届きました。
+                </span>
+              </div>
+              <span>09月03日 12:23</span>
+            </div>
+            <div class="px-3 py-2 d-flex justify-content-center align-items-center">
+              <ul class="d-flex justify-content-center align-items-center gap-2">
+                <li>&lt;</li>
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
+                <li>...</li>
+                <li>7</li>
+                <li>&gt;</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <% notifications.each do |notification| %>
+          <div class="notification">
+            <p class="notification-message"><%= link_to notification.to_notification.message, notification_path(notification) %></p>
+          </div>
+        <% end %>
+      </div>
+      <div class="mb-5">
+        <h4 class="d-flex align-items-center gap-2 fw-bold"><i class="fa fa-paw text-main"></i> 通知一覧</h4>
+        <div class="mt-4">
+          <div class="border rounded">
+            <div class="border-bottom px-3 py-2">
+              <small class="d-flex justify-content-between align-items-center">
+                <span>未談件数:2</span>
+                <span>1件~4件を表示</span>
+              </small>
+            </div>
+            <div class="px-3 py-2 d-flex justify-content-between border-bottom align-items-center">
+              <div class="d-flex align-items-center gap-2">
+                <i class="fa fa-comment"></i> <span class="text-decoration-underline">
+                  ○○さんから友達申請が届きました。
+                </span>
+              </div>
+              <span>09月03日 12:23</span>
+            </div>
+            <div class="px-3 py-2 d-flex justify-content-between border-bottom align-items-center">
+              <div class="d-flex align-items-center gap-2">
+                <i class="fa fa-comment"></i> <span class="text-decoration-underline">
+                  ○○さんから友達申請が届きました。
+                </span>
+              </div>
+              <span>09月03日 12:23</span>
+            </div>
+            <div class="px-3 py-2 d-flex justify-content-between border-bottom align-items-center">
+              <div class="d-flex align-items-center gap-2">
+                <i class="fa fa-comment"></i> <span class="text-decoration-underline">
+                  ○○さんから友達申請が届きました。
+                </span>
+              </div>
+              <span>09月03日 12:23</span>
+            </div>
+            <div class="px-3 py-2 d-flex justify-content-between border-bottom align-items-center">
+              <div class="d-flex align-items-center gap-2">
+                <i class="fa fa-comment"></i> <span class="text-decoration-underline">
+                  ○○さんから友達申請が届きました。
+                </span>
+              </div>
+              <span>09月03日 12:23</span>
+            </div>
+            <div class="px-3 py-2 d-flex justify-content-center align-items-center">
+              <ul class="d-flex justify-content-center align-items-center gap-2">
+                <li>&lt;</li>
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
+                <li>...</li>
+                <li>7</li>
+                <li>&gt;</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <% notifications.each do |notification| %>
+          <div class="notification">
+            <p class="notification-message"><%= link_to notification.to_notification.message, notification_path(notification) %></p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

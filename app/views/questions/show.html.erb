@@ -1,0 +1,77 @@
+<div class="container mt-3">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title"><%= simple_format(@question.body) %></h5>
+          <p class="card-text"><strong>カテゴリー:</strong> <%= @question.category.name %></p>
+          <p class="card-text"><strong>サブカテゴリー:</strong> <%= @question.subcategory.name %></p>
+          <p class="card-text"><strong>ステータス:</strong> <%= @question.status %></p>
+          <div class="btn-group">
+            <% if current_user == question_author(@question) && @question.status != "解決済み" %>
+              <%= link_to '編集', edit_question_path(@question), class:"btn btn-sm btn-outline-secondary" %>
+              <%= link_to '削除', @question, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-sm btn-outline-danger" %>
+            <% end %>
+            <%= link_to '戻る', questions_path, class:"btn btn-sm btn-outline-secondary" %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h2>回答</h2>
+    <% if current_user != question_author(@question) && @question.status != "解決済み" %>
+      <div class="col-md-12 mt-3">
+        <div class="card">
+          <div class="card-body">
+            <%= form_with(model: [@question, Answer.new]) do |form| %>
+              <div class="form-group mb-3">
+                <%= form.text_area :body, class: "form-control" %>
+              </div>
+              <%= form.submit "回答する", class: "btn btn-primary" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <% @answers.each do |answer| %>
+      <div class="col-md-12 mt-3">
+        <div class="card">
+        <% user = User.with_deleted.find_by(id: answer.user_id) %>
+        <div class="card-body">
+          <% if user && !user.deleted_at %>
+            <h5 class="card-title"><%= display_pet_or_username(user) %></h5>
+          <% else %>
+            <h5 class="card-title"><%= display_pet_or_username(user) %></h5>
+          <% end %>
+            <% if answer.picked? %>
+              <span class="badge bg-success">ベストアンサー</span>
+            <% end %>
+            <div id="answer-text-<%= answer.id %>">
+              <p class="card-text"><%= answer.body %></p>
+              <% if current_user == answer.user && !answer.picked? && @question.status != "解決済み" %>
+                <button class="btn btn-outline-secondary edit-answer-btn" data-answer-id="<%= answer.id %>">編集</button>
+              <% end %>
+            </div>
+
+            <div id="answer-edit-<%= answer.id %>" style="display: none;">
+              <%= form_with(model: [ @question, answer ], method: :patch, remote: true) do |form| %>
+                <%= form.text_area :body, class: "form-control" %>
+                <br>
+                <%= form.submit "保存", class: "btn btn-primary" %>
+                <button class="btn btn-secondary cancel-edit-btn" data-answer-id="<%= answer.id %>">キャンセル</button>
+              <% end %>
+            </div>
+            <p class="card-text"><%= answer.created_at.strftime('%b %d, %Y') %></p>
+            <% if current_user == @question.user && @question.status === "回答受付中" %>
+              <%= link_to 'ベストアンサーにする', question_answer_pick_path(@question, answer), method: :post, class: 'btn btn-success' %>
+            <% end %>
+            <% if current_user %>
+              <%= link_to 'いいねを取り消す', question_answer_unlike_path(@question, answer), method: :delete, id: "answer-unlike-#{answer.id}", class: 'btn btn-danger', style: "display: #{current_user.likes?(answer) ? 'block' : 'none'}", remote: true %>
+              <%= link_to 'いいね', question_answer_like_path(@question, answer), method: :post, id: "answer-like-#{answer.id}", class: 'btn btn-primary', style: "display: #{current_user.likes?(answer) ? 'none' : 'block'}", remote: true %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

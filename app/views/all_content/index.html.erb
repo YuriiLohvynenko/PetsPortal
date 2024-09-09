@@ -1,0 +1,411 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-12 col-lg-3">
+      <%= render "shared/sidebar" %>
+    </div>
+    <div class="col-12 col-lg-9 communities">
+      <h4 class="d-flex align-items-center gap-2 fw-bold"><i class="fa fa-paw text-main"></i> すべて</h4>
+      <div class="mt-4">
+        <ul class="d-flex mtabs" id="myTab" role="tablist">
+          <li class="mtab active fw-bold" role="presentation">
+            <a class="nav-link active text-main" id="all-tab" data-bs-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="true">すべて</a>
+          </li>
+          <li class="mtab" role="presentation">
+            <%= link_to 'コミュニティ', communities_path, class: "nav-link", id: "pots-tab", 'aria-controls': "communities", 'aria-selected': "false" %>
+          </li>
+          <li class="mtab" role="presentation">
+            <%= link_to 'トピック', all_posts_path, class: "nav-link", id: "pots-tab", 'aria-controls': "posts", 'aria-selected': "false" %>
+          </li>
+          <li class="mtab" role="presentation">
+            <%= link_to 'イベント', all_events_path, class: "nav-link", id: "events-tab", 'aria-controls': "events", 'aria-selected': "false" %>
+          </li>
+        </ul>
+      </div>
+      <div class="tab-pane fade show active mt-4" id="communities" role="tabpanel" aria-labelledby="communities-tab">
+        <div class="">
+          <%= form_tag(all_content_path, method: :get) do %>
+            <div class="d-flex justify-content-start align-items-center flex-md-row justify-content-md-between mt-4">
+              <div class="input-group border border-dark rounded" style="max-width: 200px">
+                <%= text_field_tag :query, params[:query], class: "form-control", placeholder: "検索する" %>
+                <div class="input-group-btn fw-bold">
+                  <button class="btn bg-transparent fw-bold" type="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-5 col-md-2 m-1 d-none">
+                <%= submit_tag "検索", class: "btn btn-warning" %>
+              </div>
+              <div class="overlay">
+                <button type="button" class="btn bg-transparent border border-dark" id="filterButton">検索条件変更</button>
+                <div id="filterBox" class="border rounded end-0 mt-2 p-3 shadow" style="display: none; width: 300px">
+                  <label class="d-flex gap-2 align-items-center mb-2">
+                    <input type="checkbox" class="form-control-check">
+                    タイトルのみで検索
+                  </label>
+                  <div class="form-group d-flex gap-2 mb-2">
+                    <label for="categorySelect" class="flex-shrink-0" style="width: 40%">カテゴリー:</label>
+                    <%= select_tag(:category, options_for_select([["カテゴリーを選択してください", nil]] + Category.all.map { |c| [c.name, c.id] }, params[:category]), class: "form-select", id: "categorySelect") %>
+                  </div>
+                  <div class="form-group d-flex gap-2 mb-2">
+                    <label for="orderBySelect" class="flex-shrink-0" style="width: 40%">並び替え:</label>
+                    <%= select_tag(:order_by, options_for_select([["並び替え", ""], ["更新日", "updated_date"],["参加人数", "participants"]], params[:order_by]), class: "form-select", id: "orderBySelect") %>
+                  </div>
+                  <div class="text-end">
+                    <%= button_tag(type: :submit, class: "btn w-100 bg-main text-white fw-bold") do %>
+                      適用する
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-5 col-md-2 m-1 d-none">
+                <%= link_to "+作成する", new_community_path, class: "btn btn-primary" %>
+              </div>
+            </div>
+          <% end %>
+          <div class="my-4 mb-5">
+            <ul class="d-flex justify-content-center gap-3 align-items-center mpagination mt-5">
+              <li>1</li>
+              <li>2</li>
+              <li>3</li>
+              <li>4</li>
+              <li>...</li>
+              <li>20</li>
+            </ul>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              すべての検索結果：<%= @all_content.size %>件 <span class="ms-5">検索条件:タイトル+更新</span>
+            </div>
+            <div><label>[1] 1件~6件を表示</label></div>
+          </div>
+          <div class="mt-4">
+            <div class="rounded mb-4 border border-dark" style="overflow: hidden">
+              <div class="bg-light-grey px-3 py-2 d-flex justify-content-between align-items-center border-bottom border-dark rounded-t">
+                <span class="fw-bold text-decoration-underline">コミュニティタイトルテキストが入ります</span>
+                <button class="btn rounded-0 text-white fw-bold bg-main d-flex gap-1 align-items-center">
+                  <i class="fa fa-plus"></i> 参加する
+                </button>
+              </div>
+              <div class="p-3">
+                <div class="d-flex gap-3">
+                  <div class="bg-light-grey d-flex justify-content-center align-items-center flex-shrink-0" style="width: 120px; height: 120px; aspect-ratio: 1/1">
+                    <i class="fa fa-image fa-3x text-white"></i>
+                  </div>
+                  <div>
+                    <p>
+                      コ が入ります。テキストが入ります。テキストが入ります。テキストが入ストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキス ト･･･ ミュニティ説明テキストがはいります。テキストが入ります。テキストが入ります。テキ
+                    </p>
+                    <div class="mt-2">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="d-flex align-items-center gap-2">
+                          <span class="text-white bg-main d-flex justify-content-center align-items-center rounded" style="width: 25px; height: 25px; aspect-ratio: 1/1">UP</span>
+                          <span>12分前</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                          <i class="fa fa-user text-light-main"></i>
+                          <span>23人が参加中</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="rounded mb-4 border border-dark" style="overflow: hidden">
+              <div class="bg-light-grey px-3 py-2 d-flex justify-content-between align-items-center border-bottom border-dark rounded-t">
+                <span class="fw-bold text-decoration-underline">コミュニティタイトルテキストが入ります</span>
+                <button class="btn rounded-0 text-white fw-bold bg-main d-flex gap-1 align-items-center">
+                  <i class="fa fa-plus"></i> 参加する
+                </button>
+              </div>
+              <div class="p-3">
+                <div class="d-flex gap-3">
+                  <div class="bg-light-grey d-flex justify-content-center align-items-center flex-shrink-0" style="width: 120px; height: 120px; aspect-ratio: 1/1">
+                    <i class="fa fa-image fa-3x text-white"></i>
+                  </div>
+                  <div>
+                    <p>
+                      コ が入ります。テキストが入ります。テキストが入ります。テキストが入ストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキス ト･･･ ミュニティ説明テキストがはいります。テキストが入ります。テキストが入ります。テキ
+                    </p>
+                    <div class="mt-2">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="d-flex align-items-center gap-2">
+                          <span class="text-white bg-main d-flex justify-content-center align-items-center rounded" style="width: 25px; height: 25px; aspect-ratio: 1/1">UP</span>
+                          <span>12分前</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                          <i class="fa fa-user text-light-main"></i>
+                          <span>23人が参加中</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="rounded mb-4 border border-dark" style="overflow: hidden">
+              <div class="bg-light-grey px-3 py-2 d-flex justify-content-between align-items-center border-bottom border-dark rounded-t">
+                <span class="fw-bold text-decoration-underline">コミュニティタイトルテキストが入ります</span>
+                <button class="btn rounded-0 text-white fw-bold bg-main d-flex gap-1 align-items-center">
+                  <i class="fa fa-plus"></i> 参加する
+                </button>
+              </div>
+              <div class="p-3">
+                <div class="d-flex gap-3">
+                  <div class="bg-light-grey d-flex justify-content-center align-items-center position-relative overflow-hidden flex-shrink-0" style="width: 120px; height: 120px; aspect-ratio: 1/1">
+                    <i class="fa fa-image fa-3x text-white"></i>
+                    <div class="position-apsolute"></div>
+                  </div>
+                  <div>
+                    <div>
+                      <div class="d-flex justify-content-start align-items-center gap-2 mb-2">
+                        <button class="btn bg-main rounded-0 text-white fw-bold flex-shrink-0" style="width: 120px">募集中</button>
+                        <span class="text-decoration-underline fw-bold text-lg">【第12回】 わんにゃん交流イベント</span>
+                      </div>
+                      <div class="d-flex justify-content-start align-items-center gap-2 mb-2">
+                        <button class="btn bg-transparent border border-dark rounded-0 fw-bold flex-shrink-0" style="width: 120px">開催日時</button>
+                        <span class="">2023年12月22日(9:00~12:00)</span>
+                      </div>
+                      <div class="d-flex justify-content-start align-items-center gap-2 mb-2">
+                        <button class="btn bg-transparent border border-dark rounded-0 fw-bold flex-shrink-0" style="width: 120px">開催場所</button>
+                        <span class="">宮城県(仙台市泉区)</span>
+                      </div>
+                    </div>
+                    <p>
+                      コミュニティの概要テキストが入ります。テキストが入ります。テキストが入ります。テキ ストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキス トが入ります。
+                    </p>
+                    <div class="mt-2">
+                      <div class="d-flex justify-content-between align-items-center gap-2">
+                        <div class="flex-fill">
+                          <div class="bg-light-grey d-flex justify-content-center align-items-center" style="aspect-ratio: 1.2/1">
+                            <i class="fa fa-image fa-4x text-light-grey"></i>
+                          </div>
+                        </div>
+                        <div class="flex-fill">
+                          <div class="bg-light-grey d-flex justify-content-center align-items-center" style="aspect-ratio: 1.2/1">
+                            <i class="fa fa-image fa-4x text-light-grey"></i>
+                          </div>
+                        </div>
+                        <div class="flex-fill">
+                          <div class="bg-light-grey d-flex justify-content-center align-items-center" style="aspect-ratio: 1.2/1">
+                            <i class="fa fa-image fa-4x text-light-grey"></i>
+                          </div>
+                        </div>
+                        <div class="flex-fill">
+                          <div class="bg-light-grey d-flex justify-content-center align-items-center" style="aspect-ratio: 1.2/1">
+                            <i class="fa fa-image fa-4x text-light-grey"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mt-2 d-flex justify-content-end align-items-center gap-3">
+                      <div class="d-flex align-items-center gap-2">
+                        <i class="fa fa-user text-main"></i>
+                        <span>10/15人</span>
+                      </div>
+                      <div class="d-flex align-items-center gap-2">
+                        <i class="fa fa-comment text-main"></i>
+                        <span>233</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="my-5">
+            <button class="btn btn-danger py-3 w-100 rounded-0 btn text-white fw-bold">
+              更新時間順に3つ (コミュニティ・トピック・イベント) が表示される
+            </button>
+            <div class="d-flex justify-content-center align-items-center gap-3 flex-column my-5">
+              <div class="rounded-circle aspect-1 bg-dark" style="width: 12px; height: 12px"></div>
+              <div class="rounded-circle aspect-1 bg-dark" style="width: 12px; height: 12px"></div>
+              <div class="rounded-circle aspect-1 bg-dark" style="width: 12px; height: 12px"></div>
+            </div>
+          </div>
+          <div class="mt-4">
+            <div class="rounded mb-4 border border-dark" style="overflow: hidden">
+              <div class="bg-light-grey px-3 py-2 d-flex justify-content-between align-items-center border-bottom border-dark rounded-t">
+                <span class="fw-bold text-decoration-underline">コミュニティタイトルテキストが入ります</span>
+                <button class="btn rounded-0 text-white fw-bold bg-main d-flex gap-1 align-items-center">
+                  <i class="fa fa-plus"></i> 参加する
+                </button>
+              </div>
+              <div class="p-3">
+                <div class="d-flex gap-3">
+                  <div class="bg-light-grey d-flex justify-content-center align-items-center flex-shrink-0" style="width: 120px; height: 120px; aspect-ratio: 1/1">
+                    <i class="fa fa-image fa-3x text-white"></i>
+                  </div>
+                  <div>
+                    <p>
+                      コ が入ります。テキストが入ります。テキストが入ります。テキストが入ストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキス ト･･･ ミュニティ説明テキストがはいります。テキストが入ります。テキストが入ります。テキ
+                    </p>
+                    <div class="mt-2">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="d-flex align-items-center gap-2">
+                          <span class="text-white bg-main d-flex justify-content-center align-items-center rounded" style="width: 25px; height: 25px; aspect-ratio: 1/1">UP</span>
+                          <span>12分前</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                          <i class="fa fa-user text-light-main"></i>
+                          <span>23人が参加中</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="rounded mb-4 border border-dark" style="overflow: hidden">
+              <div class="bg-light-grey px-3 py-2 d-flex justify-content-between align-items-center border-bottom border-dark rounded-t">
+                <span class="fw-bold text-decoration-underline">コミュニティタイトルテキストが入ります</span>
+                <button class="btn rounded-0 text-white fw-bold bg-main d-flex gap-1 align-items-center">
+                  <i class="fa fa-plus"></i> 参加する
+                </button>
+              </div>
+              <div class="p-3">
+                <div class="d-flex gap-3">
+                  <div class="bg-light-grey d-flex justify-content-center align-items-center flex-shrink-0" style="width: 120px; height: 120px; aspect-ratio: 1/1">
+                    <i class="fa fa-image fa-3x text-white"></i>
+                  </div>
+                  <div>
+                    <p>
+                      コ が入ります。テキストが入ります。テキストが入ります。テキストが入ストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキス ト･･･ ミュニティ説明テキストがはいります。テキストが入ります。テキストが入ります。テキ
+                    </p>
+                    <div class="mt-2">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="d-flex align-items-center gap-2">
+                          <span class="text-white bg-main d-flex justify-content-center align-items-center rounded" style="width: 25px; height: 25px; aspect-ratio: 1/1">UP</span>
+                          <span>12分前</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                          <i class="fa fa-user text-light-main"></i>
+                          <span>23人が参加中</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="rounded mb-4 border border-dark" style="overflow: hidden">
+              <div class="bg-light-grey px-3 py-2 d-flex justify-content-between align-items-center border-bottom border-dark rounded-t">
+                <span class="fw-bold text-decoration-underline">コミュニティタイトルテキストが入ります</span>
+                <button class="btn rounded-0 text-white fw-bold bg-main d-flex gap-1 align-items-center">
+                  <i class="fa fa-plus"></i> 参加する
+                </button>
+              </div>
+              <div class="p-3">
+                <div class="d-flex gap-3">
+                  <div class="bg-light-grey d-flex justify-content-center align-items-center position-relative overflow-hidden flex-shrink-0" style="width: 120px; height: 120px; aspect-ratio: 1/1">
+                    <i class="fa fa-image fa-3x text-white"></i>
+                    <div class="position-apsolute"></div>
+                  </div>
+                  <div>
+                    <div>
+                      <div class="d-flex justify-content-start align-items-center gap-2 mb-2">
+                        <button class="btn bg-main rounded-0 text-white fw-bold flex-shrink-0" style="width: 120px">募集中</button>
+                        <span class="text-decoration-underline fw-bold text-lg">【第12回】 わんにゃん交流イベント</span>
+                      </div>
+                      <div class="d-flex justify-content-start align-items-center gap-2 mb-2">
+                        <button class="btn bg-transparent border border-dark rounded-0 fw-bold flex-shrink-0" style="width: 120px">開催日時</button>
+                        <span class="">2023年12月22日(9:00~12:00)</span>
+                      </div>
+                      <div class="d-flex justify-content-start align-items-center gap-2 mb-2">
+                        <button class="btn bg-transparent border border-dark rounded-0 fw-bold flex-shrink-0" style="width: 120px">開催場所</button>
+                        <span class="">宮城県(仙台市泉区)</span>
+                      </div>
+                    </div>
+                    <p>
+                      コミュニティの概要テキストが入ります。テキストが入ります。テキストが入ります。テキ ストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキス トが入ります。
+                    </p>
+                    <div class="mt-2">
+                      <div class="d-flex justify-content-between align-items-center gap-2">
+                        <div class="flex-fill">
+                          <div class="bg-light-grey d-flex justify-content-center align-items-center" style="aspect-ratio: 1.2/1">
+                            <i class="fa fa-image fa-4x text-light-grey"></i>
+                          </div>
+                        </div>
+                        <div class="flex-fill">
+                          <div class="bg-light-grey d-flex justify-content-center align-items-center" style="aspect-ratio: 1.2/1">
+                            <i class="fa fa-image fa-4x text-light-grey"></i>
+                          </div>
+                        </div>
+                        <div class="flex-fill">
+                          <div class="bg-light-grey d-flex justify-content-center align-items-center" style="aspect-ratio: 1.2/1">
+                            <i class="fa fa-image fa-4x text-light-grey"></i>
+                          </div>
+                        </div>
+                        <div class="flex-fill">
+                          <div class="bg-light-grey d-flex justify-content-center align-items-center" style="aspect-ratio: 1.2/1">
+                            <i class="fa fa-image fa-4x text-light-grey"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mt-2 d-flex justify-content-end align-items-center gap-3">
+                      <div class="d-flex align-items-center gap-2">
+                        <i class="fa fa-user text-main"></i>
+                        <span>10/15人</span>
+                      </div>
+                      <div class="d-flex align-items-center gap-2">
+                        <i class="fa fa-comment text-main"></i>
+                        <span>233</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="my-4 mb-5">
+            <ul class="d-flex justify-content-center gap-3 align-items-center mpagination mt-5">
+              <li>1</li>
+              <li>2</li>
+              <li>3</li>
+              <li>4</li>
+              <li>...</li>
+              <li>20</li>
+            </ul>
+          </div>
+          <div class="row row-cols-1 row-cols-lg-4 m-0 p-0 d-none">
+            <% @all_content.each do |content| %>
+              <div class="col p-0 mt-3 border-end">
+                <div class="card m-4">
+                  <% if content.respond_to?(:image) && content.image.attached? %>
+                    <img src="<%= url_for(content.image) %>" class="card-img-top" alt="...">
+                  <% end %>
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <% if content.is_a?(Community) %>
+                        <%= link_to content.title, community_path(content) %>
+                      <% else %>
+                        <%= link_to content.title, content.community ? polymorphic_path([content.community, content]) : polymorphic_path(content) %>
+                      <% end %>
+                    </h5>
+                    <% if content.is_a?(Post) %>
+                      <p class="card-text"><%= content.body.truncate(100) %></p>
+                      <p class="card-text">いいね: <%= content.likes.count %></p>
+                      <p class="card-text">コメント: <%= content.comments.count %></p>
+                    <% elsif content.is_a?(Event) %>
+                      <p class="card-text"><%= content.details.truncate(100) %></p>
+                      <p class="card-text">開催場所: <%= content.event_place %></p>
+                      <p class="card-text">開催日時: <%= content.event_date %></p>
+                      <p class="card-text">定員: <%= content.people_limit %></p>
+                      <p class="card-text">主催者: <%= display_pet_or_username(content.user) %></p>
+                    <% else %>
+                      <p class="card-text"><%= display_content_details(content).truncate(100) %></p>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>

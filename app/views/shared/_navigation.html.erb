@@ -1,0 +1,76 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg shadow flex-column p-0">
+  <div class="container-fluid bg-main py-1 text-white">
+    <small>犬・猫の病気・けが しつけ・介護・食事などの悩みをみんなで解決しよう (仮テキスト)</small>
+  </div>
+  <div class="container-fluid py-3 bg-white">
+    <div class="d-flex justify-content-start align-items-center gap-3">
+      <a class="navbar-brand" href="<%= my_page_path %>">
+        <img src="images/logo.png" alt="Logo" style="width: 150px">
+      </a>
+      <div style="width: 200px">
+        <%= form_tag(pets_path, method: :get, class: "input-group border border-dark rounded") do %>
+          <%= text_field_tag :search, params[:search], placeholder: "ペットを探す", class: "form-control" %>
+          <div class="input-group-btn fw-bold">
+            <button class="btn bg-transparent fw-bold" type="submit">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+      <ul class="navbar-nav me-4 mb-2 mb-lg-0 gap-3">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="<%= communities_path %>">コミュニティ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="<%= all_events_path%>">イベント</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="<%= all_posts_path %>">トピック</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="<%= questions_path %>">Q&A</a>
+        </li>
+        <% if user_signed_in? %>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="<%= notifications_path %>">
+              <div class="position-relative">
+                <i class="fa fa-bell"></i>
+                <span class="position-absolute rounded-circle d-flex justify-content-center align-items-center top-50 start-50 text-white fw-bold bg-main" style="width: 20px; height: 20px; font-size: smaller !important">4</span>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="<%= messages_path %>">
+              <i class="fa fa-comment"></i>
+            </a>
+          </li>
+          <li class="nav-item d-none">
+            <a class="nav-link active" aria-current="page" href="<%= visits_path %>">足あと</a>
+          </li>
+          <li class="nav-item">
+            <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "nav-link active"  %>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <div class="btn bg-light-main text-white fw-bold px-4 d-flex justify-content-center align-items-center gap-1">
+              <i class="fa fa-key"></i>
+              <%= link_to "会員登録", new_user_registration_path, class: "nav-link active p-0 text-white"  %>
+            </div>
+          </li>
+          <li class="nav-item">
+            <div class="btn bg-light-main text-white fw-bold px-4 d-flex justify-content-center align-items-center gap-1">
+              <i class="fa fa-user"></i>
+              <%= link_to "ログイン", new_user_session_path, class: "nav-link active p-0 text-white"  %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>

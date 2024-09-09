@@ -1,0 +1,33 @@
+<div class="container m-3">
+    <div class="row">
+        <div class="col-3">
+        <%= render partial: "sidebar" %>
+        </div>
+        <div class= "col-9">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>トピック名</th>
+                    <th>作成者</th>
+                    <th>コミュニティ名</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% @posts.each do |post| %>
+                    <tr>
+                    <td><%= post.title %></td>
+                    <td><%= post.user.name %></td>
+                    <td><%= post.community.title %></td>
+                    <td>
+                        <a href="<%= community_post_path(post.community, post) %>" class="btn btn-primary">詳細</a>
+                        <a href="<%= edit_community_post_path(post.community, post) %>" class="btn btn-warning">編集</a>
+                        <a href="<%= community_post_path(post.community, post) %>" data-confirm="Are you sure?" data-method="delete" class="btn btn-danger">削除</a>
+                    </td>
+                    </tr>
+                <% end %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

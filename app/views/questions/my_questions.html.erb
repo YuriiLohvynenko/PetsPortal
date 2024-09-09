@@ -1,0 +1,25 @@
+<h1 align="center">
+  MyQ&A
+    <%= link_to "質問する", new_question_path, class:"btn btn-primary"  %>
+</h1>
+
+<div class="container">
+  <div class="row">
+    <% @questions.each do |question| %>
+      <div class="card mb-3">
+        <div class="row no-gutters">
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">質問内容: <pre><%= question.body %></pre></h5>
+              <p class="card-text">カテゴリー: <%= question.category.name %></p>
+              <p class="card-text">サブカテゴリー: <%= question.subcategory.name %></p>
+              <p class="card-text">小カテゴリー: <%= question.special_category %></p>
+              <p class="card-text">ステータス: <%= question.status %></p>
+              <%= link_to '詳細', question, class:"btn btn-primary" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

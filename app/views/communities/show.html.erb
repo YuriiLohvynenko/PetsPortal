@@ -1,0 +1,275 @@
+<h2 class="text-center mt-5">コミュニティ詳細</h2>
+<div style="position: relative;" class="mx-auto d-block" width="90%">
+  <% if @community.background_image.attached? %>
+    <img src="<%= url_for(@community.background_image) %>" class="mx-auto d-block" width="100%" height="500px">
+  <% else %>
+    <img src="https://placehold.co/600x400/png" class="mx-auto d-block" width="100%" height="500px">
+  <% end %>
+  <% if current_user == community_owner(@community) %>
+    <%= link_to '変更', edit_community_image_path(@community), class: "btn btn-outline-success", style: "position: absolute; top: 10px; right: 10px;" %>
+  <% end %>
+</div>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12 col-lg-3 pt-4">
+            <div class="card event-card">
+                <img src="<%= url_for(@community.image) %>" class="card-img-top">
+                <div class="card-body pl-0">
+                  <p class="card-text"><%= @community.title %></p>
+                  <% if current_user != community_owner(@community) %>
+                    <% if community_member(@community) %>
+                      <%= link_to "退会する", community_membership_path(@community, @community_membership ), method: :delete, class: "btn btn-outline-danger" %>
+                    <% else %>
+                      <%= form_with(model: [@community, @membership]) do |form| %>
+                        <% if @membership.errors.any? %>
+                          <div id="error_explanation">
+                            <h3><%= pluralize(@membership.errors.count, "error") %> prohibited this membership from being saved:</h3>
+                            <ul>
+                              <% @membership.errors.full_messages.each do |message| %>
+                                <li><%= message %></li>
+                              <% end %>
+                            </ul>
+                          </div>
+                        <% end %>
+
+                        <div class="actions">
+                          <%= form.submit "参加する", class: 'btn btn-outline-warning' %>
+                        </div>
+                      <% end %>
+                    <% end %>
+                  <% else %>
+                    <%= link_to '削除', @community, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-outline-danger" %>
+                    <%= link_to '編集', edit_community_path(@community), class:"btn btn-outline-success" %>
+                  <% end %>
+                  <p class="card-text mt-3">管理人</p>
+                  <div>
+                   <% if display_pet_image(@community.admin) %>
+                      <img src="<%= url_for(display_pet_image(@community.admin)) %>" class="img-thumbnail rounded-circle pic" alt="..." width="50">
+                    <% end %>
+                    <span class="card-text mt-3">
+                      <% user = User.with_deleted.find_by(id: @community.admin_id) %>
+                      <% if user && !user.deleted_at %>
+                        <%= link_to display_pet_or_username(user), user_path(user) %>
+                      <% else %>
+                        <%= display_pet_or_username(user, @community.admin_pet_name) %>
+                      <% end %>
+                    </span>
+
+                  </div>
+                  <div>
+                    <span class="card-text mt-3" style="float: left;">参加者</span>
+                    <span class="card-text mt-3" style="float: right;">
+                      <%= @community.members.count %>
+                    </span>
+                  </div>
+                  <div class="mt-5">
+                    <% @community.members.limit(8).each do |member| %>
+                      <% if display_pet_image(member) %>
+                        <img src="<%= url_for(display_pet_image(member)) %>" class="img-thumbnail rounded-circle pic" alt="..." width="50">
+                      <% end %>
+                    <% end %>
+                  </div>
+                  <p class="card-text mt-3">作成日</p>
+                  <p class="card-text"><%= @community.created_at.strftime('%Y-%m-%d') %></p>
+                  <%# <p class="card-text">Date of Joining: 20-02-2020</p> %>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-9 communities p-4">
+            <div class="row border ">
+                <div class="col-12 mt-2">
+                <%= form_with(url: search_community_path(@community), method: :get) do |form| %>
+                  <div class="d-flex justify-content-end mt-3">
+                    <div class="mr-2">
+                      <%= form.select :search_type, [["コミュニティ内全体", "all"], ["トピック", "topic"], ["イベント", "event"]], {}, class: "form-control" %>
+                    </div>
+                    <div class="mr-2">
+                      <%= form.text_field :query, placeholder: "コミュニティ内検索", class: "form-control" %>
+                    </div>
+                    <div>
+                      <%= form.submit "検索", class: "btn btn-primary" %>
+                    </div>
+                  </div>
+                <% end %>
+
+                    <div class="border m-3">
+                        <div class="col-12 text-bg-secondary text-white" style="padding-left:4%;">
+                            <p class="mb-0">詳細</p>
+                        </div>
+                        <div class="col-12 mt-4 p-0">
+                            <div class="card border-0 m-4">
+                                <div class="row">
+                                    <div class="card-body col-12">
+                                      <p class="card-text">
+                                        <%= simple_format(@community.description) %>
+                                      </p>
+                                      <p class="card-text">カテゴリー: <%= @community.category.name %></p>
+                                      <%# <span class="card-text"><i class="fas fa-heart"></i>  Likes (2)</span>
+                                      <span class="card-text"><i class="fas fa-comments"></i>  Comments (2)</span> %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% if community_member(@community) || current_user ==community_owner(@community) %>
+                      <div class="border m-3">
+                          <div class="col-12 p-0">
+                              <div class="card bg-body-secondary rounded-0">
+                                  <div class="card-body">
+                                    <form>
+                                      <div class="d-flex">
+                                          <%= link_to "イベント作成", new_community_event_path(@community), class: "btn btn-light", style: "width: 50%; margin-left: 2%" %>
+                                          <%= link_to "トピック作成", new_community_post_path(@community), class: "btn btn-light", style: "width: 50%; margin-left: 2%" %>
+                                      </div>
+                                    </form>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                    <% end %>
+
+                    <%# <div class="m-3">
+                        <div class="col-12 p-0">
+                            <ul class="nav nav-tabs nav-fill">
+                                <li class="nav-item">
+                                  <a class="nav-link active" aria-current="page" href="#">トップ</a>
+                                </li>
+                                <li class="nav-item mr-0">
+                                  <a class="nav-link active" href="#">トピック</a>
+                                </li>
+                            </ul>
+                            <div class="card border rounded-0">
+                                <div class="card-body">
+                                    <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla nihil alias sequi cupiditate voluptas nam unde recusandae possimus dolor error tempora consequatur veritatis eveniet molestiae, neque omnis, laborum enim porro.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div> %>
+                    <% unless @searched %>
+                      <div class="border m-3">
+                        <div class="col-12 text-bg-secondary text-white" style="padding-left:4%;">
+                            <p class="mb-0">トピック一覧</p>
+                        </div>
+                        <div class="col-12 mt-4 p-0">
+                        <% @community.posts.order(created_at: :desc).limit(10).each do |post| %>
+                            <div class="card border-0 m-4">
+                                <div class="card-title d-flex justify-content-between">
+                                    <div>
+                                        <%= link_to truncate(post.title, length: 30), community_post_path(@community,post) %>
+                                    </div>
+                                    <span><%= post.created_at.strftime('%Y-%m-%d') %></span>
+                                </div>
+                            </div>
+                        <% end %>
+                        <%= link_to "もっと見る", community_posts_path(@community), class: "btn btn-light" %>
+                        </div>
+                      </div>
+                    <% end %>
+                  <% unless @searched %>
+                    <div class="border m-3">
+                      <div class="col-12 text-bg-secondary text-white" style="padding-left:4%;">
+                          <p class="mb-0">イベント一覧</p>
+                      </div>
+                      <div class="col-12 mt-4 p-0">
+                        <% @community.events.order(created_at: :desc).limit(10).each do |event| %>
+                            <div class="card border-0 m-4">
+                                <div class="card-title d-flex justify-content-between">
+                                    <div>
+                                      <%= link_to truncate(event.title, length: 30), community_event_path(@community, event) %>
+                                    </div>
+                                    <span><%= event.created_at.strftime('%Y-%m-%d') %></span>
+                                </div>
+                            </div>
+                        <% end %>
+                        <%= link_to "もっと見る", community_events_path(@community), class: "btn btn-light" %>
+                      </div>
+                    </div>
+                  <% end %>
+
+              <% if @searched %>
+                <div class="border m-3">
+                  <div class="col-12 text-bg-secondary text-white" style="padding-left:4%;">
+                    <p class="mb-0">検索結果:
+                      <% case @search_type %>
+                      <% when "all" %>
+                        全体一覧
+                      <% when "topic" %>
+                        トピック一覧
+                      <% when "event" %>
+                        イベント一覧
+                      <% end %>
+                    </p>
+                  </div>
+                  <div class="col-12 mt-4 p-0">
+                    <% case @search_type %>
+                    <% when "all" %>
+                      <% @paginated_results.each do |result| %>
+                        <div class="card border-0 m-4">
+                          <div class="card-title d-flex justify-content-between">
+                            <% if result.is_a?(Post) %>
+                                <div>
+                                  <%= link_to truncate(result.title, length: 30), community_post_path(@community, result) %>
+                                </div>
+                            <% elsif result.is_a?(Event) %>
+                                <div>
+                                  <%= link_to truncate(result.title, length: 30), community_event_path(@community, result) %>
+                                </div>
+                            <% end %>
+                            <span><%= result.created_at.strftime('%Y-%m-%d') %></span>
+                          </div>
+                        </div>
+                      <% end %>
+                      <!-- 共通のページネーションリンク -->
+                      <div class="mt-3">
+                        <%= will_paginate @paginated_results,
+                                        previous_label: '前へ',
+                                        next_label: '次へ' %>
+                      </div>
+
+                    <% when "topic" %>
+                      <% @posts.each do |post| %>
+                        <div class="card border-0 m-4">
+                          <div class="card-title d-flex justify-content-between">
+                              <div>
+                                <%= link_to truncate(post.title, length: 30), community_post_path(@community, post) %>
+                              </div>
+                              <span><%= post.created_at.strftime('%Y-%m-%d') %></span>
+                          </div>
+                        </div>
+                      <% end %>
+                      <div class="mt-3">
+                        <%= will_paginate @posts,
+                                        previous_label: '前へ',
+                                        next_label: '次へ' %>
+                      </div>
+
+                    <% when "event" %>
+                      <% @events.each do |event| %>
+                        <div class="card border-0 m-4">
+                            <div class="card-title d-flex justify-content-between">
+                                <div>
+                                  <%= link_to truncate(event.title, length: 30), community_event_path(@community, event) %>
+                                </div>
+                                <span><%= event.created_at.strftime('%Y-%m-%d') %></span>
+                            </div>
+                        </div>
+                      <% end %>
+                      <div class="mt-3">
+                        <%= will_paginate @events,
+                                        previous_label: '前へ',
+                                        next_label: '次へ' %>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

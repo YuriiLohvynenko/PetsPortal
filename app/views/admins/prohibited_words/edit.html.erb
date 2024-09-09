@@ -1,0 +1,11 @@
+<div class="container m-3">
+    <div class="row">
+        <div class= "col-9">
+            <h1>禁止ワードを編集する</h1>
+            <%= form_with(model: @prohibited_word, url: prohibited_word_path(@prohibited_word), method: :patch) do |form| %>
+            <%= form.text_field :word %>
+            <%= form.submit '更新する', class: "btn btn-primary" %>
+            <% end %>
+        </div>
+    </div>
+</div>

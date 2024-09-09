@@ -1,0 +1,176 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-12 col-lg-3">
+      <%= render "shared/sidebar" %>
+    </div>
+    <div class="col-12 col-lg-9 communities">
+      <h3 class="d-flex align-items-center gap-2 fw-bold"><i class="fa fa-paw text-main"></i> Myコミュニティ一覧</h3>
+      <div class="mt-4">
+        <nav class="d-flex mtabs">
+          <a class="mtab px-3 py-1 fw-bold text-main active" aria-current="page" href="<%= my_communities_path %>">参加コミュニティ</a>
+          <a class="mtab px-3 py-1" href="<%= my_events_path %>">参加イベント</a>
+        </nav>
+      </div>
+      <div class="mt-4">
+        <div class="row">
+          <%= form_tag(my_communities_path, method: :get) do %>
+            <div class="row mt-2 d-none">
+              <div class="col-5 col-md-3 m-1">
+                <%= text_field_tag(:query, params[:query], class: "form-control", placeholder: "検索") %>
+              </div>
+              <div class="col-5 col-md-2 m-1">
+                <%= submit_tag "検索", class: "btn btn-warning" %>
+              </div>
+              <div class="col-5 col-md-4 m-1 overlay">
+                <button type="button" class="btn btn-primary" id="filterButton">検索条件変更</button>
+                <div id="filterBox" class="border" style="display: none;">
+                  <div class="form-group">
+                    <label for="categorySelect">カテゴリー:</label>
+                    <%= select_tag(:category, options_for_select([["カテゴリーを選択してください", ""]] + Category.all.map { |c| [c.name, c.id] }, params[:category]), class: "form-select", id: "categorySelect") %>
+                  </div>
+                  <div class="form-group">
+                    <label for="orderBySelect">並び替え:</label>
+                    <%= select_tag(:order_by, options_for_select([["並び替え", ""], ["更新日", "updated_date"],["参加人数", "participants"]], params[:order_by]), class: "form-select", id: "orderBySelect") %>
+                  </div>
+                  <div class="text-end">
+                    <%= button_tag(type: :submit, class: "btn btn-sm btn-primary") do %>
+                      適用する
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-5 col-md-2 m-1">
+                <%= link_to "+作成する", new_community_path, class: "btn btn-primary" %>
+              </div>
+            </div>
+          <% end %>
+          <div class="d-flex justify-content-start align-items-center flex-md-row justify-content-md-between gap-md-2">
+            <div class="d-flex align-items-center gap-3 flex-md-row justify-conent-md-between align-items-center">
+              <div class="input-group border border-dark rounded">
+                <input type="text" class="form-control border-0" placeholder="フリーワード検索">
+                <div class="input-group-btn fw-bold">
+                  <button class="btn bg-transparent fw-bold" type="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="btn-group">
+                <button type="button" class="btn text-truncate bg-main text-white">訪問順</button>
+                <button type="button" class="btn text-truncate bg-transparent border border-main text-main">更新順</button>
+                <button type="button" class="btn text-truncate bg-transparent border border-main text-main">開催日順</button>
+              </div>
+            </div>
+            <div>
+              <select class="form-control border-dark">
+                <option>すべてのコミュニティ</option>
+                <option>すべてのコミュニティ</option>
+                <option>すべてのコミュニティ</option>
+                <option>すべてのコミュニティ</option>
+              </select>
+            </div>
+          </div>
+          <div class="mt-4 d-flex justify-content-between align-items-center">
+            <div><label>管理人: </label> <span></span></div>
+            <div><label>[1] 1件~6件を表示</label></div>
+          </div>
+          <div class="mt-4">
+            <div class="row row-cols-2 row-cols-lg-3 m-0 p-0">
+              <div class="px-2 mb-3 d-flex flex-column">
+                <div class="rounded flex-grow-1 p-2 p-md-4 bg-light-yellow">
+                  <img src="images/1.png" alt="img" class="w-100 rounded " style="aspect-ratio: 125/100 !important">
+                  <h5 class="mt-3 mb-0 fw-bold">コミュニティ名が入ります</h5>
+                  <div class="mt-3 d-flex gap-2 align-items-center">
+                    <i class="fa fa-user text-main"></i> 290人参加
+                  </div>
+                  <div class="mt-3">
+                    <button class="btn border-main bg-white text-main w-100">編集 • 管理</button>
+                  </div>
+                </div>
+              </div>
+              <div class="px-2 mb-3 d-flex flex-column">
+                <div class="rounded flex-grow-1 p-2 p-md-4 bg-light-grey">
+                  <img src="images/2.png" alt="img" class="w-100 rounded " style="aspect-ratio: 125/100 !important">
+                  <h5 class="mt-3 mb-0 fw-bold">コミュニティ名が入ります</h5>
+                  <div class="mt-3 d-flex gap-2 align-items-center">
+                    <i class="fa fa-user text-main"></i> 290人参加
+                  </div>
+                </div>
+              </div>
+              <div class="px-2 mb-3 d-flex flex-column">
+                <div class="rounded flex-grow-1 p-2 p-md-4 bg-light-yellow">
+                  <img src="images/1.png" alt="img" class="w-100 rounded " style="aspect-ratio: 125/100 !important">
+                  <h5 class="mt-3 mb-0 fw-bold">コミュニティ名が入ります</h5>
+                  <div class="mt-3 d-flex gap-2 align-items-center">
+                    <i class="fa fa-user text-main"></i> 290人参加
+                  </div>
+                  <div class="mt-3">
+                    <button class="btn border-main bg-white text-main w-100">編集 • 管理</button>
+                  </div>
+                </div>
+              </div>
+              <div class="px-2 mb-3 d-flex flex-column">
+                <div class="rounded flex-grow-1 p-2 p-md-4 bg-light-yellow">
+                  <img src="images/1.png" alt="img" class="w-100 rounded " style="aspect-ratio: 125/100 !important">
+                  <h5 class="mt-3 mb-0 fw-bold">コミュニティ名が入ります</h5>
+                  <div class="mt-3 d-flex gap-2 align-items-center">
+                    <i class="fa fa-user text-main"></i> 290人参加
+                  </div>
+                  <div class="mt-3">
+                    <button class="btn border-main bg-white text-main w-100">編集 • 管理</button>
+                  </div>
+                </div>
+              </div>
+              <div class="px-2 mb-3 d-flex flex-column">
+                <div class="rounded flex-grow-1 p-2 p-md-4 bg-light-grey">
+                  <img src="images/2.png" alt="img" class="w-100 rounded " style="aspect-ratio: 125/100 !important">
+                  <h5 class="mt-3 mb-0 fw-bold">コミュニティ名が入ります</h5>
+                  <div class="mt-3 d-flex gap-2 align-items-center">
+                    <i class="fa fa-user text-main"></i> 290人参加
+                  </div>
+                </div>
+              </div>
+              <div class="px-2 mb-3 d-flex flex-column">
+                <div class="rounded flex-grow-1 p-2 p-md-4 bg-light-yellow">
+                  <img src="images/1.png" alt="img" class="w-100 rounded " style="aspect-ratio: 125/100 !important">
+                  <h5 class="mt-3 mb-0 fw-bold">コミュニティ名が入ります</h5>
+                  <div class="mt-3 d-flex gap-2 align-items-center">
+                    <i class="fa fa-user text-main"></i> 290人参加
+                  </div>
+                  <div class="mt-3">
+                    <button class="btn border-main bg-white text-main w-100">編集 • 管理</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row row-cols-1 row-cols-lg-4 m-0 p-0">
+              <% @communities.each do |community| %>
+                <div class="col p-0 mt-3 border-end">
+                  <div class="card m-4">
+                    <% if community.image.attached? %>
+                      <img src="<%= url_for(community.image) %>" class="card-img-top" alt="...">
+                    <% end %>
+                    <% if current_user == community_owner(community) %>
+                      <a href="<%= edit_community_path(community) %>" class="btn btn-admin-edit position-absolute top-0 end-0 m-2">編集・管理</a>
+                    <% end %>
+                    <div class="card-body">
+                      <h5 class="card-title"><%= link_to community.title, community_path(community) %></h5>
+                      <p class="card-text"><%= community.description.truncate(100) %></p>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+            <%# PAGNIATION CTRL PART %>
+            <ul class="d-flex justify-content-center gap-3 align-items-center mpagination mt-5">
+              <li>1</li>
+              <li>1</li>
+              <li>1</li>
+              <li>...</li>
+              <li>1</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

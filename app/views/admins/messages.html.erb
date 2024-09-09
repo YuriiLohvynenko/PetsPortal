@@ -1,0 +1,32 @@
+
+<div class="container m-3">
+
+    <div class="row">
+        <div class="col-3">
+        <%= render partial: "sidebar" %>
+        </div>
+        <div class= "col-9">
+            <%= form_with model: AdminMessage.new, url: admin_messages_path, remote: true do |form| %>
+            <%= form.text_field :content %>
+            <%= form.submit '保存する', class: "btn btn-primary" %>
+            <% end %>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>メッセージ</th>
+                    <th>送信日</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% @admin_messages.each do |admin_message| %>
+                    <tr>
+                    <td><%= admin_message.content %></td>
+                    <td><%= admin_message.created_at %></td>
+                    <td><%= link_to "削除", admin_message_path(admin_message), method: :delete  %></td>
+                    </tr>
+                <% end %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

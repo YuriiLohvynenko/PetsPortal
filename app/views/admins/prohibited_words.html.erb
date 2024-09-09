@@ -1,0 +1,33 @@
+
+<div class="container m-3">
+    <div class="row">
+        <div class="col-3">
+        <%= render partial: "sidebar" %>
+        </div>
+        <div class= "col-9">
+            <%= form_with model: ProhibitedWord.new, url: prohibited_words_path, remote: true do |form| %>
+            <%= form.text_field :word %>
+            <%= form.submit '追加する', class: "btn btn-primary" %>
+            <% end %>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>制限ワード</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% @prohibited_words.each do |prohibited_word| %>
+                    <tr>
+                    <td><%= prohibited_word.word %></td>
+                    <td>
+                        <a href="<%= edit_prohibited_word_path(prohibited_word) %>" class="btn btn-warning">編集</a>
+                        <a href="<%= prohibited_word_path(prohibited_word) %>" data-confirm="Are you sure?" data-method="delete" class="btn btn-danger">削除</a>
+                    </td>
+                    </tr>
+                <% end %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

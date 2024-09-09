@@ -1,0 +1,76 @@
+<div class="border" style="margin:20%; margin-top:5%; padding:3%;">
+
+  <h2>ユーザー情報</h2>
+
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+    <%= render "users/shared/error_messages", resource: resource %>
+
+    <div class="field mb-3">
+      <%= f.label :名前, class:"form-label" %><br />
+      <%= f.text_field :name, autofocus: true, autocomplete: "name", class:"form-control" %>
+    </div>
+
+    <div class="field mb-3">
+      <%= f.label :メールアドレス, class:"form-label" %><br />
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control" %>
+    </div>
+
+    <div class="field mb-3">
+      <%= f.label :年齢, class:"form-label" %><br />
+      <%= f.number_field :age, autofocus: true, autocomplete: "age", class:"form-control" %>
+    </div>
+
+    <div class="field mb-3">
+      <%= f.label :ニックネーム, class: "form-label" %><br>
+      <%= f.text_field :username, autofocus: true, autocomplete: "username", class: "form-control" %>
+    </div>
+
+    <div class="field mb-3">
+      <%= f.label :都道府県, class: "form-label" %><br>
+      <%= f.select :prefecture, options_for_select(prefectures_with_cities.keys), { prompt: "都道府県を選択" }, id: 'prefecture-select', class: 'form-control' %>
+    </div>
+
+    <div class="field mb-3">
+      <%= f.label :市町村, class: "form-label" %><br>
+      <%= f.select :city, options_for_select([]), { prompt: "市町村を選択" }, id: 'city-select', class: 'form-control' %>
+    </div>
+
+    <div class="field mb-3">
+      <%= f.check_box :own_pet %>
+      <%= f.label :ペットを飼っているもしくは飼おうとしている, class: "form-label" %>
+    </div>
+
+    <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+      <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+    <% end %>
+
+    <div class="field mb-3">
+      <%= f.label :パスワード, class:"form-label" %> <i>(変更しない場合は空欄にしてください。)</i><br />
+      <%= f.password_field :password, autocomplete: "new-password", class:"form-control" %>
+      <% if @minimum_password_length %>
+        <br />
+        <em><%= @minimum_password_length %> 文字以上入力してください。</em>
+      <% end %>
+    </div>
+
+    <div class="field mb-3">
+      <%= f.label :パスワード確認, class:"form-label" %><br />
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class:"form-control" %>
+    </div>
+
+    <div class="field mb-3">
+      <%= f.label :現在のパスワード, class:"form-label" %> <i>(変更するために現在のパスワードを入力してください。)</i><br />
+      <%= f.password_field :current_password, autocomplete: "current-password", class:"form-control" %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit "更新する", class:"btn btn-success" %>
+    </div>
+  <% end %>
+
+  <h3>退会処理</h3>
+
+  <div><%= button_to "退会する", registration_path(resource_name), data: { confirm: "本当に退会しますか？", turbo_confirm: "本当に退会しますか？" }, method: :delete, class:"btn btn-danger" %></div>
+
+  <%= link_to "戻る", :back %>
+</div>

@@ -1,0 +1,81 @@
+<div class="container mt-4">
+  <div class="row">
+        <p class="card-text text-center">
+        <% if @user == current_user %>
+          <%= link_to "#{display_pet_or_username(@user)}さんの日記", my_diaries_path %>
+        <% else %>
+          <%= link_to "#{display_pet_or_username(@user)}さんの日記", user_diaries_path(@user) %>
+        <% end %>
+      </p>
+    <div class="col-md-2"> <!-- Left sidebar starts here -->
+      <% today = Date.today %>
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title"><%= today.strftime('%Y年%m月') %></h5>
+          <% first_day_of_month = today.at_beginning_of_month %>
+          <% last_day_of_month = today.at_end_of_month %>
+          <% first_day_of_calendar = first_day_of_month.beginning_of_week(:monday) %>
+          <% last_day_of_calendar = last_day_of_month.end_of_week(:sunday) %>
+          <% first_day_of_calendar.step(last_day_of_calendar, 1).each_slice(7) do |week| %>
+            <div class="row">
+              <% week.each do |day| %>
+                <div class="col-md-1 small-font no-wrap">
+                  <% if day.month == today.month %>
+                    <% if @user.has_diary_in?(day.year, day.month, day.day) %>
+                      <%= link_to day.day, user_diaries_path(@user, year: day.year, month: day.month, day: day.day) %>
+                    <% else %>
+                      <%= day.day.to_s.rjust(2, '0') %>
+                    <% end %>
+                  <% else %>
+                    <!-- Display nothing or you could add a non-breaking space '&nbsp;' for layout purposes -->
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <% @user.diary_years.each do |year| %>
+        <div class="card mb-1 small-font no-wrap">
+          <div class="card-body">
+            <h5 class="card-title"><%= year %>年</h5>
+            <% (1..12).each_slice(4) do |quarter| %>
+              <div class="row">
+                <% quarter.each do |month| %>
+                  <div class="col-md-2">
+                    <% if @user.has_diary_in?(year, month) %>
+                      <%= link_to "#{month}月", user_diaries_path(@user, year: year, month: month) %>
+                    <% else %>
+                      <%= "#{month}月" %>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="col-md-8">
+      <% @diaries.each do |diary| %>
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <% if diary.image.attached? %>
+              <div class="col-md-4">
+                <img src="<%= url_for(diary.image) %>" class="card-img" height="250">
+              </div>
+            <% end %>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title"><%= diary.title %></h5>
+                <p class="card-text"><%= diary.content %></p>
+                <%= link_to '詳細', user_diary_path(diary.user, diary), class:"btn btn-primary" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

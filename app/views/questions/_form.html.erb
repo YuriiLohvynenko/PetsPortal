@@ -1,0 +1,215 @@
+<div class="container my-5">
+  <div id="qa-create-panel">
+    <div>
+      <h3 class="d-flex align-items-center gap-2 fw-bold justify-content-center"><i class="fa fa-paw text-main"></i> 質問を作成する</h3>
+    </div>
+    <div class="mt-5">
+      <h5 class="d-flex align-items-center gap-2 fw-bold "><i class="fa fa-paw text-main"></i> 質問作成 <button class="btn btn-sm bg-main text-white">必須</button></h5>
+      <div class="bg-light-grey p-4 rounded">
+        <div class="row mb-3">
+          <label class="col-lg-2 mt-2 fw-bold">対象ペット</label>
+          <div class="col-lg-10">
+            <select class="form-control">
+              <option>豆太郎</option>
+              <option>豆太郎</option>
+              <option>豆太郎</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label class="col-lg-2 mt-2 fw-bold">種類</label>
+          <div class="col-lg-10">
+            <div class="d-flex align-items-center gap-3">
+              <label class="d-flex align-items-center gap-2">
+                <input type="radio" name="pet" class="form-check"> 犬
+              </label>
+              <label class="d-flex align-items-center gap-2">
+                <input type="radio" name="pet" class="form-check"> 猫
+              </label>
+              <label class="d-flex align-items-center gap-2">
+                <input type="radio" name="pet" class="form-check"> その他ペット
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label class="col-lg-2 mt-2 fw-bold">大分類</label>
+          <div class="col-lg-10">
+            <div class="row" style="padding: 0 0.75rem">
+              <div class="col-md-2 px-1">
+                <button class="btn w-100 bt-transparent btn-qa-cat text-xs border border-2 border-main d-flex flex-column gap-1 justify-content-center align-items-center">
+                  <i class="fa fa-syringe text-main"></i>
+                  <label class="text-truncate">病気・ケガ</label>
+                </button>
+              </div>
+              <div class="col-md-2 px-1">
+                <button class="btn w-100 bt-transparent btn-qa-cat text-xs border border-2 border-main d-flex flex-column gap-1 justify-content-center align-items-center">
+                  <i class="fa fa-syringe fa-xl text-main"></i>
+                  <label class="text-truncate">食事</label>
+                </button>
+              </div>
+              <div class="col-md-2 px-1">
+                <button class="btn w-100 bt-transparent btn-qa-cat text-xs border border-2 border-main d-flex flex-column gap-1 justify-content-center align-items-center">
+                  <i class="fa fa-sun fa-xl text-main"></i>
+                  <label class="text-truncate">飼い方・しつけ</label>
+                </button>
+              </div>
+              <div class="col-md-2 px-1">
+                <button class="btn w-100 bt-transparent btn-qa-cat text-xs border border-2 border-main d-flex flex-column gap-1 justify-content-center align-items-center">
+                  <i class="fa fa-sun fa-xl text-main"></i>
+                  <label class="text-truncate">お出かけ・遊び</label>
+                </button>
+              </div>
+              <div class="col-md-2 px-1">
+                <button class="btn w-100 bt-transparent btn-qa-cat text-xs border border-2 border-main d-flex flex-column gap-1 justify-content-center align-items-center">
+                  <i class="fa fa-heart fa-xl text-main"></i>
+                  <label class="text-truncate">長生き・介護</label>
+                </button>
+              </div>
+              <div class="col-md-2 px-1">
+                <button class="btn w-100 bt-transparent btn-qa-cat text-xs border border-2 border-main d-flex flex-column gap-1 justify-content-center align-items-center">
+                  <i class="fa fa-comment fa-xl text-main"></i>
+                  <label class="text-truncate">その他</label>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label class="col-lg-2 mt-2 fw-bold">中分類</label>
+          <div class="col-lg-10">
+            <select class="form-control">
+              <option>分類を選んでください</option>
+              <option>豆太郎</option>
+              <option>豆太郎</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label class="col-lg-2 mt-2 fw-bold">小分類</label>
+          <div class="col-lg-10">
+            <select class="form-control">
+              <option>分類を選んでください</option>
+              <option>豆太郎</option>
+              <option>豆太郎</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-5">
+      <h5 class="d-flex align-items-center gap-2 fw-bold "><i class="fa fa-paw text-main"></i> どのようなお困りごとですか? (50文字以上) <button class="btn btn-sm bg-main text-white">必須</button></h5>
+      <div class="mt-4">
+        <div class="mb-4">
+          <label class="text-sm mb-2">0文字(50~1000文字)</label>
+          <textarea class="form-control" rows="8" placeholder="いたずらや過激な表現を含む投稿などは、掲載保留にさせていただく場合があります"></textarea>
+          <div class="text-sm text-main mt-2">
+            ※お困りごとを入力してください
+          </div>
+          <div class="text-danger text-sm mt-2">
+            ※個人が特定されるような情報をご記入されないようご注意ください。
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-5">
+      <h5 class="d-flex align-items-center gap-2 fw-bold "><i class="fa fa-paw text-main"></i> キーワード <button class="btn btn-sm bg-main text-white">必須</button></h5>
+      <div class="mt-4">
+        <div class="mb-4">
+          <input class="form-control">
+          <div class="text-sm mt-2">
+            困りごとのポイントとなるキーワードをいれると、質問を発見・ 回答してもらいやすくなります。
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-5">
+      <button class="btn bg-main fw-bold text-white">入力内容を確認する</button>
+    </div>
+  </div>
+</div>
+<div class="container my-5">
+  <div id="qa-preview-panel">
+    <div>
+      <h3 class="d-flex align-items-center gap-2 fw-bold justify-content-center"><i class="fa fa-paw text-main"></i> 質問を作成する</h3>
+    </div>
+    <div class="mt-5">
+      <div class="mb-5">
+        ご入力内容に間違いがないか、ご確認ください。
+      </div>
+      <div class="border border-b border-dark mb-5"></div>
+      <div class="mb-5">
+        <label class="fw-bold mb-2">対象ペット</label>
+        <p>豆太郎</p>
+      </div>
+      <div class="mb-5">
+        <label class="fw-bold mb-2">大分類</label>
+        <p>****</p>
+      </div>
+      <div class="mb-5">
+        <label class="fw-bold mb-2">中分類</label>
+        <p>****</p>
+      </div>
+      <div class="mb-5">
+        <label class="fw-bold mb-2">どのようなお困りごとですか? (50文字以上)</label>
+        <p>質問のテキストが入ります。質問のテキストが入ります。質問のテキストが入ります。質問のテキストが入ります。質問の テキストが入ります。質問のテキストが入ります。質問のテキストが入ります。質問のテキストが入ります。
+          トが入ります。
+          質問のテキストが入ります。質問のテキストが入ります。質問のテキストが入ります</p>
+      </div>
+      <div class="mb-5">
+        <label class="fw-bold mb-2">対象ペット</label>
+        <p>キーワード キーワード</p>
+      </div>
+    </div>
+    <div class="text-center mt-5 d-flex justify-content-center align-items-center gap-5">
+      <button class="btn bg-light-cyan fw-bold text-white px-5">修正する</button>
+      <button class="btn bg-main fw-bold text-white px-5">公開する</button>
+    </div>
+  </div>
+</div>
+<div class="container my-5">
+  <div id="qa-confirm-panel">
+    <div>
+      <h3 class="d-flex align-items-center gap-2 fw-bold justify-content-center"><i class="fa fa-paw text-main"></i> 投稿が完了しました</h3>
+    </div>
+    <div class="mt-5 text-center">
+      <p class="mb-5">質問の投稿が完了しました。</p>
+      <button class="btn bg-main fw-bold text-white px-5">投稿を確認する</button>
+    </div>
+  </div>
+</div>
+<div class="border d-none" style="margin:20%; margin-top:5%; padding:3%;">
+  <h1>質問する</h1>
+  <%= form_with(model: question) do |form| %>
+    <% if question.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(question.errors.count, "error") %> prohibited this question from being saved:</h2>
+        <ul>
+          <% question.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="field mb-3">
+      <%= form.label "詳細", class:"form-label" %>
+      <%= form.text_area :body, class:"form-control" %>
+    </div>
+    <div class="form-group">
+      <%= form.label :category_id, "大分類" %>
+      <%= form.collection_select :category_id, Category.all, :id, :name, { prompt: "大分類を選んでください" }, class: "form-control", id: "category-select" %>
+    </div>
+    <!-- Subcategory -->
+    <div class="form-group">
+      <%= form.label :subcategory_id, "中分類" %>
+      <%= form.collection_select :subcategory_id, (question.category&.subcategories || []), :id, :name, { prompt: "中分類を選んでください" }, class: "form-control", id: "subcategory-select" %>
+    </div>
+    <div class="form-group">
+      <%= form.label :special_category, "小分類" %>
+      <%= form.select :special_category, [ "病気・ケガ", "食事", "飼い方・しつけ", "お出かけ・遊び", "長生き・介護", "その他"]  , :prompt => '小分類を選んでください', class: "form-control" %>
+    </div>
+    <div class="actions">
+      <%= form.submit "保存", class:"btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

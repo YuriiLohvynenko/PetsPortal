@@ -1,0 +1,96 @@
+    <h2 class="text-center mt-5">コメント内スレッド</h2>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12 col-lg-3 pt-4">
+                <%= render "shared/sidebar" %>
+            </div>
+
+            <div class="col-12 col-lg-9 communities p-4">
+                <div class="row">
+                <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <%= link_to 'すべて', all_content_path, class: "nav-link", id: "all-tab", 'aria-controls': "all", 'aria-selected': "false" %>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <%= link_to 'コミュニティ', communities_path, class: "nav-link", id: "communities-tab", 'aria-controls': "communities", 'aria-selected': "false" %>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <%= link_to 'トピック', all_posts_path, class: "nav-link #{'active' if @comment.root_commentable_type == 'Post'}", id: "posts-tab", 'aria-controls': "posts", 'aria-selected': "false" %>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <%= link_to 'イベント', all_events_path, class: "nav-link #{'active' if @comment.root_commentable_type == 'Event'}", id: "events-tab", 'aria-controls': "events", 'aria-selected': "false" %>
+                    </li>
+                </ul>
+                </div>
+                <div class="row border ">
+                    <div class="col-12 mt-2">
+                        <div class="border m-3">
+                            <div class="card border-0 m-4">
+                                <div class="row">
+                                    <div class="card-body col-1 pr-1">
+                                        <% if @comment.user.pets.first && @comment.user.pets.first.image.attached? %>
+                                            <img src="<%= url_for(@comment.user.pets.first.image) %>" class="img-thumbnail rounded-circle pic" width="80" alt="...">
+                                        <% end %>
+                                    </div>
+                                    <div class="card-body col-11 pl-1">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                        <p class="card-title"><%= display_pet_or_username(@comment.user) %></p>
+                                        </div>
+                                        <span class="card-subtitle mb-2 text-body-secondary"><%= @comment.created_at.strftime('%Y-%m-%d')  %></span>
+                                        <p class="card-text">
+                                        <%= @comment.content %>
+                                        </p>
+                                        <span class="card-text">
+                                            <% if current_user %>
+                                                <%= link_to comment_comment_unlike_path(@comment, @comment), method: :delete, id: "comment-unlike-#{@comment.id}", style: "display: #{current_user.likes?(@comment) ? 'inline' : 'none'}", remote: true do %>
+                                                <i class="fas fa-heart"></i>
+                                                <% end %>
+                                                <%= link_to comment_comment_like_path(@comment, @comment, community_id: @community.id, format: :js), method: :post, id: "comment-like-#{@comment.id}", style: "display: #{current_user.likes?(@comment) ? 'none' : 'inline'}", remote: true, community_id: @community.id do %>
+                                                <i class="fas fa-heart"></i>
+                                                <% end %>
+                                            <% end %>
+                                            いいね (<span id= "comment-likes-count-<%= @comment.id %>"><%= @comment.likes.count %></span>)</span>
+                                        <span class="card-text"><i class="fas fa-comments"></i>  コメント数 (<%= @comment.comments.count %>)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border m-3">
+                            <div class="col-12 text-bg-primary text-black">
+                                <p class="mb-0">コメント数 (<%= @comment.comments.count %>)</p>
+                            </div>
+                            <div class="col-12 mt-4 p-0">
+                                <% @comments.each_with_index do |comment, index| %>
+                                    <%= render partial: 'comments/comment', locals: { comment: comment, community: @community, comment_index: index + 1 + (((params[:page] || 1).to_i - 1) * 10) } %>
+                                <% end %>
+                                <% if community_member(@community) || current_user ==community_owner(@community) %>
+                                    <div class="card bg-body-secondary">
+                                        <div class="card-body">
+                                            <% if current_user %>
+                                                <%= form_for([@comment, @comment.comments.build(community_id: @community.id)]) do |f| %>
+                                                <div class="d-flex">
+                                                    <% if current_user.pets.first && current_user.pets.first.image.attached? %>
+                                                        <img src="<%= url_for(current_user.pets.first.image) %>" class="rounded-circle" style="width: 50px; height: 50px;" alt="...">
+                                                    <% end %>
+                                                    <div class="ml-2" style="position: relative; flex: 1;">
+                                                    <%= f.text_area :content, class: "form-control", rows: 4, placeholder: "コメントを入力" %>
+                                                    <button type="submit" class="btn btn-primary" style="position: absolute; bottom: 5px; right: 5px;">
+                                                        <i class="fas fa-arrow-right"></i>
+                                                    </button>
+                                                    </div>
+                                                </div>
+                                                <%= f.hidden_field :community_id, value: @community.id %>
+                                                <% end %>
+                                            <% end %>
+                                        </div>
+                                    </div>
+                                <% end %>
+                            </div>
+                            <%= will_paginate @comments %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

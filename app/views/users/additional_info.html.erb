@@ -1,0 +1,8 @@
+<%= form_for @user, url: save_additional_info_path, method: :post, html: { id: 'additional-info-form' } do |f| %>
+  <%= f.check_box :own_pet %>
+  <%= f.label :own_pet, "ペットを飼っているもしくは飼おうとしている" %><br>
+  <%= f.text_field :username, placeholder: "ニックネーム", required: true %>
+  <%= f.select :prefecture, options_for_select(prefectures_with_cities.keys), { prompt: "都道府県を選択" }, id: 'prefecture-select' %>
+  <%= f.select :city, options_for_select([]), { prompt: "市町村を選択" }, id: 'city-select' %><br>
+  <%= f.submit "保存する" %>
+<% end %>

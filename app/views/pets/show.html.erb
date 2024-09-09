@@ -1,0 +1,41 @@
+<div class="container mt-3">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div class="card shadow-sm">
+      <% if @pet.image.attached? %>
+  <div style="width: 100%; height: 300px; display: flex; justify-content: center; align-items: center;">
+    <img src="<%= url_for(@pet.image) %>" alt="Pet image" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+  </div>
+<% end %>
+        <div class="card-body">
+        <h5 class="card-title"><%= @pet.name %></h5>
+        <p class="card-text">
+          <span class="badge bg-info text-dark"><strong>年齢:</strong> <%= @pet.age %></span>
+          <span class="badge bg-success"><strong>性別:</strong> <%= @pet.gender %></span>
+          <% if @pet.user && (@pet.user.prefecture.present? || @pet.user.city.present?) %>
+            <span class="badge bg-primary"><strong>場所:</strong>
+              <%= [@pet.user.prefecture, @pet.user.city].compact.join %>
+            </span>
+          <% end %>
+        </p>
+
+          <p class="card-text">
+            <strong>オーナー:</strong>
+            <% if @pet.user %>
+              <%= link_to @pet.user.name, user_path(@pet.user), class: "text-decoration-none" %>
+            <% else %>
+              退会したユーザー
+            <% end %>
+          </p>
+          <div class="btn-group">
+            <% if current_user == pet_owner(@pet) %>
+              <%= link_to '編集', edit_pet_path(@pet), class:"btn btn-sm btn-outline-primary" %>
+              <%= link_to '削除', @pet, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-sm btn-outline-danger" %>
+            <% end %>
+            <%= link_to '戻る', :back, class:"btn btn-sm btn-outline-secondary" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

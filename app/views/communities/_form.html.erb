@@ -1,0 +1,179 @@
+<div class="container my-5" >
+  <h4 class="d-flex align-items-center justify-content-center gap-2 fw-bold"><i class="fa fa-paw text-main"></i> コミュニティ作成</h4>
+  <div class="mt-5 bg-main py-2 px-3 fw-bold text-white">
+    ※エラー項目があります (副管理人への就任方法)
+  </div>
+  <div class="mt-5">
+    <h5 class="d-flex align-items-center gap-2 fw-bold"><i class="fa fa-paw text-main"></i> コミュニティ内容</h5>
+    <%= form_with(model: community, class: "mt-4") do |form| %>
+      <% if community.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(community.errors.count, "エラー") %>があります。 </h2>
+          <ul>
+            <% community.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <div class="mb-3">
+        <div class="px-4 py-2 bg-light-yellow d-flex justify-content-start align-items-center gap-2">
+          <button class="btn btn-sm bg-main text-white fw-bold">必須</button>
+          <span>コミュニティ名 <small>(全角15文字以内)</small></span>
+        </div>
+        <div class="mt-3 px-4">
+          <div style="max-width: 350px">
+            <%= form.text_field :title, class:"form-control" %>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <div class="px-4 py-2 bg-light-yellow d-flex justify-content-start align-items-center gap-2">
+          <button class="btn btn-sm bg-main text-white fw-bold">必須</button>
+          <span>カテゴリ</span>
+        </div>
+        <div class="mt-3 px-4">
+          <div  style="max-width: 350px">
+            <%= form.select :category_id, options_for_select(Category.all.map { |c| [c.name, c.id] }), { prompt: "カテゴリーを選択してください" }, class: "form-select" %>
+          </div>
+          <small class="mt-2 d-block">
+            ※適切なカテゴリに移動させて頂く場合がございます。
+          </small>
+        </div>
+      </div>
+      <div class="mb-3">
+        <div class="px-4 py-2 bg-light-yellow d-flex justify-content-start align-items-center gap-2">
+          <button class="btn btn-sm bg-main text-white fw-bold">必須</button>
+          <span>参加条件と公開レベル</span>
+        </div>
+        <div class="mt-3 px-4">
+          <div class="d-flex align-items-center gap-3">
+            <label class="d-flex align-items-center gap-2">
+              <input type="radio" class="form-control-radio">
+              誰でも参加できる(公開)
+            </label>
+            <label class="d-flex align-items-center gap-2">
+              <input type="radio" class="form-control-radio">
+              管理人の承認が必要(公開)
+            </label>
+            <label class="d-flex align-items-center gap-2">
+              <input type="radio" class="form-control-radio">
+              管理人の承認が必要(非公開)
+            </label>
+          </div>
+          <small class="mt-2 d-block">
+            ※非公開にすると、参加者以外に内容が表示されません。
+          </small>
+        </div>
+      </div>
+      <div class="mb-3">
+        <div class="px-4 py-2 bg-light-yellow d-flex justify-content-start align-items-center gap-2">
+          <button class="btn btn-sm bg-main text-white fw-bold">必須</button>
+          <span>インターネット公開</span>
+        </div>
+        <div class="mt-3 px-4">
+          <div class="d-flex align-items-center gap-3">
+            <label class="d-flex align-items-center gap-2">
+              <input type="radio" class="form-control-radio">
+              公開する
+            </label>
+            <label class="d-flex align-items-center gap-2">
+              <input type="radio" class="form-control-radio">
+              公開しない
+            </label>
+          </div>
+          <small class="mt-2 d-block">
+            ※詳しい使い方は、コミュニティのインターネット公開をご覧ください。
+          </small>
+        </div>
+      </div>
+      <div class="mb-3">
+        <div class="px-4 py-2 bg-light-yellow d-flex justify-content-start align-items-center gap-2">
+          <button class="btn btn-sm bg-main text-white fw-bold">必須</button>
+          <span>副管理人への就任方法</span>
+        </div>
+        <div class="mt-3 px-4">
+          <div class="d-flex align-items-center gap-3">
+            <label class="d-flex align-items-center gap-2">
+              <input type="radio" class="form-control-radio">
+              管理人が任命するか、参加者が立候補し管理人が承認
+            </label>
+            <label class="d-flex align-items-center gap-2">
+              <input type="radio" class="form-control-radio">
+              管理人が任命
+            </label>
+          </div>
+          <small class="mt-2 d-block">
+            ※立候補は、3日以内に承認する必要があります。
+          </small>
+          <small class="mt-2 d-block text-main">
+            ※副管理人への就任方法を選択してください。
+          </small>
+        </div>
+      </div>
+      <div class="mb-3">
+        <div class="px-4 py-2 bg-light-yellow d-flex justify-content-start align-items-center gap-2">
+          <button class="btn btn-sm bg-main text-white fw-bold">必須</button>
+          <span>トピック作成権限</span>
+        </div>
+        <div class="mt-3 px-4">
+          <div class="d-flex align-items-center gap-3">
+            <label class="d-flex align-items-center gap-2">
+              <input type="radio" class="form-control-radio">
+              参加者が作成できる
+            </label>
+            <label class="d-flex align-items-center gap-2">
+              <input type="radio" class="form-control-radio">
+              管理者のみ作成できる
+            </label>
+          </div>
+          <small class="mt-2 d-block">
+            ※イベント。アンケートにも適用されます。
+          </small>
+        </div>
+      </div>
+      <div class="mb-3">
+        <div class="px-4 py-2 bg-light-yellow d-flex justify-content-start align-items-center gap-2">
+          <button class="btn btn-sm bg-main text-white fw-bold">必須</button>
+          <span>コミュニティの説明 (全角10000文字以内)</span>
+        </div>
+        <div class="mt-3 px-4">
+          <%= form.text_area :description, rows: "6",  class:"form-control" %>
+          <small class="mt-2 d-block">
+            ※コミュニティと無関係な内容などは、事務局の判断で削除させて頂く場合がございます。
+          </small>
+        </div>
+      </div>
+      <div class="mb-3">
+        <div class="px-4 py-2 bg-light-yellow d-flex justify-content-start align-items-center gap-2">
+          <span>写真</span>
+        </div>
+        <div class="mt-3 px-4">
+          <button class="btn border border-dark ">ファイルを選択</button>
+          <div class="field mb-3 d-none">
+            <%= form.label :画像, class:"form-label" %>
+            <%= form.file_field :image, id: "field_field" %>
+          </div>
+          <small class="mt-2 d-block">
+            ※000kb以内のjpg.png画像
+          </small>
+          <div class="mt-2">
+            <div class="aspect-1 bg-light-grey d-flex justify-content-center align-items-center" style="width: 125px">
+              <i class="fa fa-image fa-3x"></i>
+            </div>
+          </div>
+          <small class="mt-2 d-block">
+            写真のアップロードが上手くいかない場合は、投稿時に画像がアップロードできないをご覧ください。
+          </small>
+        </div>
+      </div>
+      <div class="mb-3 bg-light-yellow px-4 py-3 text-sm">
+        作成後1ヶ月経っても登録数が1人の場合、また複数参加者がいる場合でもトピックの無いコミュニティは自動的に削 除させていただきます。公序良俗に反する表現・写真・イラストの掲載は禁止しています。
+        投稿に関しては利用規約およびプライバシーポリシーをご確認ください。利用規約の禁止事項や免責事項に反する場 合、事前の通告なしに投稿を削除させていただく場合がありますのでご了承ください。
+      </div>
+      <div class="mt-5 text-center">
+        <button type="submit" class="btn bg-main text-white fw-bold px-3">入力内容を確認する</button>
+      </div>
+    <% end %>
+  </div>
+</div>

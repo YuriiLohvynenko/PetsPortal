@@ -1,0 +1,50 @@
+<div class="border" style="margin:20%; margin-top:5%; padding:3%;">
+  <h1>イベント情報入力</h1>
+  <%= form_with(model: [@community, @event]) do |form| %>
+    <% if @event.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@event.errors.count, "エラー") %>があります。 </h2>
+
+        <ul>
+        <% @event.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="field mb-3">
+      <%= form.label :タイトル, class:"form-label" %>
+      <%= form.text_field :title, class:"form-control", placeholder: "タイトルを入力してください" %>
+    </div>
+
+    <div class="field mb-3">
+      <%= form.label :詳細, class:"form-label" %>
+      <%= form.text_area :details, rows: 6, class:"form-control", placeholder: "詳細を入力してください" %>
+    </div>
+
+    <div class="field mb-3">
+      <%= form.label :場所, class:"form-label" %>
+      <%= form.text_field :event_place, required: true, class:"form-control" %>
+    </div>
+
+    <div class="field mb-3">
+      <%= form.label :日時, class:"form-label" %>
+      <%= form.datetime_local_field :event_date, required: true, class:"form-control" %>
+    </div>
+
+    <div class="field mb-3">
+      <%= form.label :定員, class:"form-label" %>
+      <%= form.number_field :people_limit, required: true, min: 1, class:"form-control" %>
+    </div>
+
+    <div class="field mb-3">
+      <%= form.label :画像, class:"form-label" %>
+      <%= form.file_field :image, class:"form-control" %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit "保存する", class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+</div>

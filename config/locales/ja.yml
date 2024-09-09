@@ -1,0 +1,61 @@
+ja:
+  activerecord:
+    errors:
+      models:
+        visit:
+          attributes:
+            visitor:
+              required: "訪問者が不正です。"
+        diary:
+          attributes:
+            image:
+              blank: "画像を設定してください"
+        pet:
+          attributes:
+            category:
+              required: "カテゴリーが必要です"
+            subcategory:
+              required: "サブカテゴリーが必要です"
+            image:
+              blank: "画像が必要です"
+        community:
+          attributes:
+            image:
+              blank: "画像が必要です"
+        post:
+          attributes:
+            image:
+              blank: "画像を設定してください"
+            title:
+              blank: "タイトルを入力してください"
+            body:
+              blank: "説明を入力してください"
+        event:
+          attributes:
+            image:
+              blank: "画像を設定してください"
+            title:
+              blank: "タイトルを入力してください"
+            details:
+              blank: "説明を入力してください"
+        user:
+          attributes:
+            email:
+              blank: "メールアドレスを入力してください"
+              taken: "すでに使用されています"
+            password:
+              blank: "パスワードを入力してください"
+              too_short: "パスワードが短すぎます"
+            current_password:
+              blank: "現在のパスワードを入力してください"
+              invalid: "現在のパスワードが一致しません"
+            password_confirmation:
+              confirmation: "パスワードが一致しません"
+            name:
+              blank: "名前を入力してください"
+            age:
+              blank: "年齢を入力してください"
+      messages:
+        not_saved:
+          one: "%{resource}の保存ができませんでした：1つのエラーが発生しました。"
+          other: "%{resource}の保存ができませんでした：%{count}つのエラーが発生しました。"

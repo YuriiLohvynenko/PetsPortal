@@ -1,0 +1,342 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-12 col-lg-3">
+      <%= render "shared/sidebar" %>
+    </div>
+    <div class="col-12 col-lg-9 events">
+      <h3 class="d-flex align-items-center gap-2 fw-bold"><i class="fa fa-paw text-main"></i> Myコミュニティ一覧</h3>
+      <div class="mt-4">
+        <nav class="d-flex mtabs">
+          <a class="mtab px-3 py-1" aria-current="page" href="<%= my_communities_path %>">参加コミュニティ</a>
+          <a class="mtab px-3 py-1 fw-bold text-main active" href="<%= my_events_path %>">参加イベント</a>
+        </nav>
+      </div>
+      <div class="tab-content d-none" id="myTabContent">
+        <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+          <div class="row border">
+            <div class="row mt-2">
+              <div class="col-5 col-md-3 m-1">
+                <%= form_tag(my_events_path, method: :get) do %>
+                  <%= text_field_tag :query, params[:query], class: "form-control", placeholder: "検索" %>
+                </div>
+                <div class="col-5 col-md-2 m-1">
+                  <%= submit_tag "検索", class: "btn btn-warning" %>
+                </div>
+              <% end %>
+              <div class="col-5 col-md-4 m-1 overlay">
+                <%= form_tag(my_events_path, method: :get) do %>
+                  <button type="button" class="btn btn-primary" id="filterButton">検索条件変更</button>
+                  <div id="filterBox" class="border" style="display: none;">
+                    <div class="form-group">
+                      <%= label_tag :start_date, "日時:" %>
+                      <%= date_field_tag :start_date, params[:start_date], class: "form-control", placeholder: "From" %>
+                      <%= date_field_tag :end_date, params[:end_date], class: "form-control", placeholder: "To" %>
+                    </div>
+                    <div class="form-group">
+                      <%= label_tag :place, "場所:" %>
+                      <%= text_field_tag :place, params[:place], class: "form-control", placeholder: "場所を入力してください" %>
+                    </div>
+                    <div class="form-group">
+                      <%= label_tag :order_by, "並び替え:" %>
+                      <%= select_tag :order_by, options_for_select([["並び替え", ""], ["更新日", "updated_date"], ["開催日", "event_date"], ["参加人数", "participants"]], params[:order_by]), class: "form-select", id: "orderBySelect" %>
+                    </div>
+                    <div class="text-end">
+                      <%= button_tag "適用する", type: :submit, class: "btn btn-sm btn-primary" %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+            <div class="col-12 col-md-12 m-1">
+              <p>イベントの検索結果：<%= @events.size %>件</p>
+            </div>
+            <div class="row row-cols-1 row-cols-lg-4 m-0 p-0">
+              <% @events.each do |event| %>
+                <div class="col-12 col-md-12 m-1">
+                  <div class="card mb-4">
+                    <% if event.image.attached? %>
+                      <img src="<%= url_for(event.image) %>" class="card-img-top" alt="...">
+                    <% end %>
+                    <div class="card-body">
+                      <h5 class="card-title"><%= link_to event.title, community_event_path(event.community, event) %></h5>
+                      <p class="card-text"><%= event.details.truncate(100) %></p>
+                      <p class="card-text">開催場所: <%= event.event_place %></p>
+                      <p class="card-text">開催日時: <%= event.event_date %></p>
+                      <p class="card-text">定員: <%= event.people_limit %></p>
+                      <p class="card-text">主催者: <%= display_pet_or_username(event.user) %></p>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="d-flex justify-content-start align-items-center flex-md-row justify-content-md-between gap-md-2 mt-4">
+          <div class="d-flex align-items-center gap-3 flex-md-row justify-conent-md-between align-items-center">
+            <div class="input-group border border-dark rounded">
+              <input type="text" class="form-control border-0" placeholder="フリーワード検索">
+              <div class="input-group-btn fw-bold">
+                <button class="btn bg-transparent fw-bold" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn text-truncate bg-main text-white">今後のイベント</button>
+              <button type="button" class="btn text-truncate bg-transparent border border-main text-main">終了イベント</button>
+            </div>
+          </div>
+          <div>
+            <select class="form-control border-dark">
+              <option>すべてのコミュニティ</option>
+              <option>すべてのコミュニティ</option>
+              <option>すべてのコミュニティ</option>
+              <option>すべてのコミュニティ</option>
+            </select>
+          </div>
+        </div>
+        <div class="mt-4 d-flex justify-content-end align-items-center">
+          <div><label>[1] 1件~6件を表示</label></div>
+        </div>
+      </div>
+      <div class="mt-4">
+        <div class="mb-4 rounded my-event-card">
+          <div class="position-relative">
+            <img src="/images/1.png" class="w-100 thumb mobject-fit">
+            <div class="position-absolute left-0 bottom-0 w-100 px-4 pb-4">
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <button class="btn  rounded-0 text-white bg-light-cyan">主催</button>
+                <button class="btn  rounded-0 text-white bg-main">募集中</button>
+              </div>
+              <h6 class="text-white text-decoration-underline">【第12回】 わんにゃん交流イベント</h6>
+            </div>
+          </div>
+          <div class="bg-light-grey p-4 content">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <button class="btn btn-sm rounded-0 bg-white border border-dark">開催日時</button>
+              <span>2023年12月22日(9:00~12:00)</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn btn-sm rounded-0 bg-white border border-dark">開催場所</button>
+              <span>宮城県(仙台市泉区) 市民ホール1F</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <div class="d-flex align-items-center gap-2">
+                <span class="px-2 py-1 bg-normal-grey p-1 d-block">
+                  <i class="fa fa-image text-white"></i>
+                </span>
+                <span>コミュニティ名が入ります</span>
+              </div>
+              <div class="d-flex justify-content-end align-items-center gap-3">
+                <div class="d-flex align-items-center gap-1">
+                  <i class="fa fa-user text-main"></i>
+                  <span>10/15人</span>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                  <i class="fa fa-comment text-main"></i><span>233</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mb-4 rounded my-event-card">
+          <div class="position-relative">
+            <img src="/images/1.png" class="w-100 thumb mobject-fit">
+            <div class="position-absolute left-0 bottom-0 w-100 px-4 pb-4">
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <button class="btn  rounded-0 text-white bg-light-cyan">主催</button>
+                <button class="btn  rounded-0 text-dark bg-white border border-dark">募集終了</button>
+              </div>
+              <h6 class="text-white text-decoration-underline">【第12回】 わんにゃん交流イベント</h6>
+            </div>
+          </div>
+          <div class="bg-light-grey p-4 content">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <button class="btn btn-sm rounded-0 bg-white border border-dark">開催日時</button>
+              <span>2023年12月22日(9:00~12:00)</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn btn-sm rounded-0 bg-white border border-dark">開催場所</button>
+              <span>宮城県(仙台市泉区) 市民ホール1F</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <div class="d-flex align-items-center gap-2">
+                <span class="px-2 py-1 bg-normal-grey p-1 d-block">
+                  <i class="fa fa-image text-white"></i>
+                </span>
+                <span>コミュニティ名が入ります</span>
+              </div>
+              <div class="d-flex justify-content-end align-items-center gap-3">
+                <div class="d-flex align-items-center gap-1">
+                  <i class="fa fa-user text-main"></i>
+                  <span>10/15人</span>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                  <i class="fa fa-comment text-main"></i><span>233</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mb-4 rounded my-event-card">
+          <div class="position-relative">
+            <img src="/images/1.png" class="w-100 thumb mobject-fit">
+            <div class="position-absolute left-0 bottom-0 w-100 px-4 pb-4">
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <button class="btn  rounded-0 text-white bg-light-cyan">主催</button>
+                <button class="btn  rounded-0 text-white bg-main">募集中</button>
+              </div>
+              <h6 class="text-white text-decoration-underline">【第12回】 わんにゃん交流イベント</h6>
+            </div>
+          </div>
+          <div class="bg-light-grey p-4 content">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <button class="btn btn-sm rounded-0 bg-white border border-dark">開催日時</button>
+              <span>2023年12月22日(9:00~12:00)</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn btn-sm rounded-0 bg-white border border-dark">開催場所</button>
+              <span>宮城県(仙台市泉区) 市民ホール1F</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <div class="d-flex align-items-center gap-2">
+                <span class="px-2 py-1 bg-normal-grey p-1 d-block">
+                  <i class="fa fa-image text-white"></i>
+                </span>
+                <span>コミュニティ名が入ります</span>
+              </div>
+              <div class="d-flex justify-content-end align-items-center gap-3">
+                <div class="d-flex align-items-center gap-1">
+                  <i class="fa fa-user text-main"></i>
+                  <span>10/15人</span>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                  <i class="fa fa-comment text-main"></i><span>233</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mb-4 rounded my-event-card">
+          <div class="position-relative">
+            <img src="/images/1.png" class="w-100 thumb mobject-fit">
+            <div class="position-absolute left-0 bottom-0 w-100 px-4 pb-4">
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <button class="btn  rounded-0 text-white bg-light-cyan">主催</button>
+                <button class="btn  rounded-0 text-white bg-main">募集中</button>
+              </div>
+              <h6 class="text-white text-decoration-underline">【第12回】 わんにゃん交流イベント</h6>
+            </div>
+          </div>
+          <div class="bg-light-grey p-4 content">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <button class="btn btn-sm rounded-0 bg-white border border-dark">開催日時</button>
+              <span>2023年12月22日(9:00~12:00)</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn btn-sm rounded-0 bg-white border border-dark">開催場所</button>
+              <span>宮城県(仙台市泉区) 市民ホール1F</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <div class="d-flex align-items-center gap-2">
+                <span class="px-2 py-1 bg-normal-grey p-1 d-block">
+                  <i class="fa fa-image text-white"></i>
+                </span>
+                <span>コミュニティ名が入ります</span>
+              </div>
+              <div class="d-flex justify-content-end align-items-center gap-3">
+                <div class="d-flex align-items-center gap-1">
+                  <i class="fa fa-user text-main"></i>
+                  <span>10/15人</span>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                  <i class="fa fa-comment text-main"></i><span>233</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mb-4 rounded my-event-card">
+          <div class="position-relative">
+            <img src="/images/1.png" class="w-100 thumb mobject-fit">
+            <div class="position-absolute left-0 bottom-0 w-100 px-4 pb-4">
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <button class="btn  rounded-0 text-white bg-light-cyan">主催</button>
+                <button class="btn  rounded-0 text-white bg-main">募集中</button>
+              </div>
+              <h6 class="text-white text-decoration-underline">【第12回】 わんにゃん交流イベント</h6>
+            </div>
+          </div>
+          <div class="bg-light-grey p-4 content">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <button class="btn btn-sm rounded-0 bg-white border border-dark">開催日時</button>
+              <span>2023年12月22日(9:00~12:00)</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn btn-sm rounded-0 bg-white border border-dark">開催場所</button>
+              <span>宮城県(仙台市泉区) 市民ホール1F</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <div class="d-flex align-items-center gap-2">
+                <span class="px-2 py-1 bg-normal-grey p-1 d-block">
+                  <i class="fa fa-image text-white"></i>
+                </span>
+                <span>コミュニティ名が入ります</span>
+              </div>
+              <div class="d-flex justify-content-end align-items-center gap-3">
+                <div class="d-flex align-items-center gap-1">
+                  <i class="fa fa-user text-main"></i>
+                  <span>10/15人</span>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                  <i class="fa fa-comment text-main"></i><span>233</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mb-4 rounded my-event-card">
+          <div class="position-relative">
+            <img src="/images/1.png" class="w-100 thumb mobject-fit">
+            <div class="position-absolute left-0 bottom-0 w-100 px-4 pb-4">
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <button class="btn  rounded-0 text-white bg-light-cyan">主催</button>
+                <button class="btn  rounded-0 text-white bg-main">募集中</button>
+              </div>
+              <h6 class="text-white text-decoration-underline">【第12回】 わんにゃん交流イベント</h6>
+            </div>
+          </div>
+          <div class="bg-light-grey p-4 content">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <button class="btn btn-sm rounded-0 bg-white border border-dark">開催日時</button>
+              <span>2023年12月22日(9:00~12:00)</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn btn-sm rounded-0 bg-white border border-dark">開催場所</button>
+              <span>宮城県(仙台市泉区) 市民ホール1F</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <div class="d-flex align-items-center gap-2">
+                <span class="px-2 py-1 bg-normal-grey p-1 d-block">
+                  <i class="fa fa-image text-white"></i>
+                </span>
+                <span>コミュニティ名が入ります</span>
+              </div>
+              <div class="d-flex justify-content-end align-items-center gap-3">
+                <div class="d-flex align-items-center gap-1">
+                  <i class="fa fa-user text-main"></i>
+                  <span>10/15人</span>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                  <i class="fa fa-comment text-main"></i><span>233</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

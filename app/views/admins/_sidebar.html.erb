@@ -1,0 +1,33 @@
+<!-- _sidebar.html.erb -->
+
+<aside class="sidebar">
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <%= link_to "オーナー", admin_users_path, class: "nav-link" %>
+    </li>
+    <li class="nav-item">
+      <%= link_to "ペット", admin_pets_path, class: "nav-link" %>
+    </li>
+    <li class="nav-item">
+      <%= link_to "コミュニティ", admin_communities_path, class: "nav-link" %>
+    </li>
+    <li class="nav-item">
+      <%= link_to "トピック", admin_posts_path, class: "nav-link" %>
+    </li>
+    <li class="nav-item">
+      <%= link_to "イベント", admin_events_path, class: "nav-link" %>
+    </li>
+    <li class="nav-item">
+      <%= link_to "日記", admin_diaries_path, class: "nav-link" %>
+    </li>
+    <li class="nav-item">
+      <%= link_to "ペットカテゴリー", admin_categories_path, class: "nav-link" %>
+    </li>
+    <li class="nav-item">
+      <%= link_to "キーワード制限", admin_prohibited_words_path, class: "nav-link" %>
+    </li>
+    <li class="nav-item">
+      <%= link_to "運営からのメッセージ", admin_notifications_path, class: "nav-link" %>
+    </li>
+  </ul>
+</aside>

@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  event_date: 2023-05-12 11:06:51
+  event_place: MyString
+  people_limit: 1
+  details: MyText
+  user: one
+  community: one
+
+two:
+  title: MyString
+  event_date: 2023-05-12 11:06:51
+  event_place: MyString
+  people_limit: 1
+  details: MyText
+  user: two
+  community: two

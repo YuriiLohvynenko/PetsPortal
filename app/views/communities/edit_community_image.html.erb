@@ -1,0 +1,6 @@
+<div class="container mt-5 text-center">
+    <%= form_with model: @community do |form| %>
+        <%= form.file_field :background_image %>
+        <%= form.submit "Upload" %>
+    <% end %>
+</div>

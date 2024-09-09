@@ -1,0 +1,5 @@
+if ("<%= @likeable_type %>" === 'comment') {
+    $("#comment-likes-count-<%= @likeable.id %>").text(<%= @likeable.likes.count %>);
+}
+$("#<%= @likeable_type %>-like-<%= @likeable.id %>").toggle();
+$("#<%= @likeable_type %>-unlike-<%= @likeable.id %>").toggle();

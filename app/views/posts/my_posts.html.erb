@@ -1,0 +1,18 @@
+<h1 class="text-center">My Topics</h1>
+<div class="row">
+    <% @posts.each do |post| %>
+        <div class="col-md-12">
+            <div class="card mt-3">
+                <div class="card-body">
+                    <% if post.image.attached? %>
+                        <img src="<%= url_for(post.image) %>" class="card-img-top mb-3">
+                    <% end %>
+                    <h3 class="card-text"><%= link_to post.title, community_post_path(post.community, post) %></h3>
+                    <p class="card-text"><%= post.body %></p>
+                    <p class="card-text">投稿者:<%= display_pet_or_username(post.user) %></p>
+
+                </div>
+            </div>
+        </div>
+    <% end %>
+</div>

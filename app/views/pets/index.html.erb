@@ -1,0 +1,66 @@
+<h1 align="center">ペット検索</h1>
+
+<div class="container mb-3">
+  <div class="row">
+    <div class="col-md-10 offset-md-1">
+    <%= form_tag(pets_path, method: :get, class: "form-inline") do %>
+      <div class="form-search mr-2">
+        <%= label_tag :search, "キーワード" %>
+        <%= text_field_tag :search, params[:search], placeholder: "ペットを探す", class: "form-control" %>
+      </div>
+
+      <div class="form-search mr-2">
+        <%= label_tag :category, "カテゴリー" %>
+        <%= select_tag :category, options_for_select(Category.all.map { |c| [c.name, c.id] }, params[:category]), include_blank: true, class: "form-control", id: "category-select3" %>
+      </div>
+
+      <div class="form-search mr-2">
+        <%= label_tag :subcategory, "サブカテゴリー" %>
+       <% if params[:category].present? %>
+          <% category = Category.find(params[:category]) if params[:category].present? %>
+          <%= select_tag :subcategory, options_for_select(category&.subcategories&.map { |c| [c.name, c.id] } || [], params[:subcategory]), include_blank: true, class: "form-control", id: "subcategory-select3" %>
+        <% else %>
+          <%= select_tag :subcategory, options_for_select([], params[:subcategory]), include_blank: true, class: "form-control", id: "subcategory-select3" %>
+        <% end %>
+
+      </div>
+
+      <div class="form-search mr-2">
+      <%= label_tag :prefecture, "都道府県" %>
+      <%= select_tag :prefecture, options_for_select(prefectures_with_cities.keys, params[:prefecture]), prompt: "都道府県を選んでください", class: "form-control", id: "prefecture-select" %>
+
+      <%= label_tag :city, "市町村" %>
+      <%= select_tag :city, options_for_select([], params[:city]), prompt: "市町村を選んでください", class: "form-control", id: "city-select" %>
+
+      </div>
+
+      <%= submit_tag "検索", class: "btn btn-primary" %>
+    <% end %>
+
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <% @pets.each do |pet| %>
+      <div class="card mb-3">
+        <div class="row no-gutters">
+          <% if pet.image.attached? %>
+            <div class="col-md-4">
+              <img src="<%= url_for(pet.image) %>" class="card-img" height="250">
+            </div>
+          <% end %>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title"><%= pet.name %></h5>
+              <p class="card-text">年齢: <%= pet.age %></p>
+              <p class="card-text">性別: <%= pet.gender %></p>
+              <%= link_to '詳細', pet, class:"btn btn-primary" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

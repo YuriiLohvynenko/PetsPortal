@@ -1,0 +1,30 @@
+<div class="border" style="margin:20%; margin-top:5%; padding:3%;">
+
+  <h2>管理者ログイン</h2>
+
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+    <div class="field mb-3">
+      <%= f.label :メールアドレス, class:"form-label" %><br />
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control" %>
+    </div>
+
+    <div class="field mb-3">
+      <%= f.label :パスワード, class:"form-label" %><br />
+      <%= f.password_field :password, autocomplete: "current-password", class:"form-control" %>
+    </div>
+
+    <% if devise_mapping.rememberable? %>
+      <div class="field mb-3">
+        <%= f.check_box :remember_me, class:"form-label" %>
+        <%= f.label :パスワードを記憶する %>
+      </div>
+    <% end %>
+
+    <div class="actions">
+      <%= f.submit "ログイン", class:"btn btn-primary" %>
+    </div>
+  <% end %>
+
+  <%= render "admins/shared/links" %>
+
+</div>

@@ -1,0 +1,174 @@
+<div class="container my-5">
+  <div class="row">
+    <div class="col-lg-3">
+      <%= render "shared/sidebar" %>
+    </div>
+    <div class="col-lg-9">
+      <h4 class="d-flex align-items-center gap-2 fw-bold"><i class="fa fa-paw text-main"></i> ペットプロフィール編集</h4>
+      <div class="mt-5" >
+        <%= form_with(model: pet) do |form| %>
+          <div class="field mb-3">
+            <div class="px-4 bg-light-yellow py-2 d-flex align-items-center gap-2">
+              <span class="bg-main px-2 py-1 rounded text-white fw-bold d-block">必須</span>
+              <%= form.label :ペットを飼っていますか?, class:"" %>
+            </div>
+            <div class="mt-3 px-4">
+              <div class="d-flex gap-3">
+                <div class="d-flex gap-2 align-items-center">
+                  <label class="d-flex align-items-center gap-1">
+                    <input type="radio" class="form-control-check"> 飼っている
+                  </label>
+                </div>
+                <div class="d-flex gap-2 align-items-center">
+                  <label class="d-flex align-items-center gap-1">
+                    <input type="radio" class="form-control-check"> 飼っていない
+                  </label>
+                </div>
+                <label class="d-flex align-items-center gap-2">
+                  <input type="radio" class="form-control-check"> 飼おうとしている
+                </label>
+              </div>
+            </div>
+            <%= form.select :gender, ["オス", "メス"], {prompt: "性別"}, class: "form-control d-none"  %>
+          </div>
+          <h4 class="d-flex align-items-center gap-2 fw-bold my-5"><i class="fa fa-paw text-main"></i> ペット情報</h4>
+          <% if pet.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(pet.errors.count, "エラー") %> によりこのペットは保存できませんでした。</h2>
+              <ul>
+                <% pet.errors.each do |error| %>
+                  <li><%= error.full_message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+          <div class="field mb-3">
+            <div class="px-4 bg-light-yellow py-2 d-flex align-items-center gap-2">
+              <span class="bg-main px-2 py-1 rounded text-white fw-bold d-block">必須</span>
+              <%= form.label :名前, class:"" %>
+            </div>
+            <div class="mt-3 px-4">
+              <div style="max-width: 400px">
+                <%= form.text_field :name, class:"form-control" %>
+              </div>
+            </div>
+          </div>
+          <div class="field mb-3">
+            <div class="px-4 bg-light-yellow py-2 d-flex align-items-center gap-2">
+              <span class="bg-main px-2 py-1 rounded text-white fw-bold d-block">必須</span>
+              <%= form.label :年齢, class:"" %>
+            </div>
+            <div class="mt-3 px-4">
+              <div class="d-flex gap-3">
+                <div class="d-flex gap-1 align-items-center">
+                  <div style="max-width: 160px">
+                    <%= form.number_field :age, class:"form-control" %>
+                  </div>
+                  <label>歲</label>
+                </div>
+                <div class="d-flex gap-1 align-items-center">
+                  <div style="max-width: 160px">
+                    <%= form.number_field :age, class:"form-control" %>
+                  </div>
+                  <label>ヶ月</label>
+                </div>
+                <label class="d-flex align-items-center gap-2">
+                  <input type="radio" class="form-control-check"> わからない
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="field mb-3">
+            <div class="px-4 bg-light-yellow py-2 d-flex align-items-center gap-2">
+              <span class="bg-main px-2 py-1 rounded text-white fw-bold d-block">必須</span>
+              <%= form.label :性別, class:"" %>
+            </div>
+            <div class="mt-3 px-4">
+              <div class="d-flex gap-3">
+                <div class="d-flex gap-2 align-items-center">
+                  <label class="d-flex align-items-center gap-1">
+                    <input type="radio" class="form-control-check"> オス
+                  </label>
+                </div>
+                <div class="d-flex gap-2 align-items-center">
+                  <label class="d-flex align-items-center gap-1">
+                    <input type="radio" class="form-control-check"> メス
+                  </label>
+                </div>
+                <label class="d-flex align-items-center gap-2">
+                  <input type="radio" class="form-control-check"> わからない
+                </label>
+              </div>
+            </div>
+            <%= form.select :gender, ["オス", "メス"], {prompt: "性別"}, class: "form-control d-none"  %>
+          </div>
+          <div class="field mb-3">
+            <div class="px-4 bg-light-yellow py-2 d-flex align-items-center gap-2">
+              <span class="bg-main px-2 py-1 rounded text-white fw-bold d-block">必須</span>
+              <%= form.label :ペットの種類, class:"" %>
+            </div>
+            <div class="mt-3 px-4">
+              <div style="max-width: 400px" class="mb-3">
+                <%= form.collection_select :category_id, Category.all, :id, :name, { prompt: "大分類を選んでください" }, class: "form-control", id: "category-select" %>
+              </div>
+              <div style="max-width: 400px">
+                <%= form.collection_select :subcategory_id, (pet.category&.subcategories || []), :id, :name, { prompt: "中分類を選択してください" }, { class: "form-control", id: "subcategory-select", selected: pet.subcategory_id } %>
+              </div>
+            </div>
+          </div>
+          <div class="field mb-3">
+            <div class="px-4 bg-light-yellow py-2 d-flex align-items-center gap-2">
+              <span class="bg-main px-2 py-1 rounded text-white fw-bold d-block">必須</span>
+              <%= form.label :所在地, class:"" %>
+            </div>
+            <div class="mt-3 px-4">
+              <div class="d-flex gap-4">
+                <div style="max-width: 400px">
+                  <label class="form-label">都道府県</label>
+                  <%= form.text_field :name, class:"form-control" %>
+                </div>
+                <div style="max-width: 400px">
+                  <label class="form-label">市町村</label>
+                  <%= form.text_field :name, class:"form-control" %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="field mb-3">
+            <div class="px-4 bg-light-yellow py-2 d-flex align-items-center gap-2">
+              <span class="bg-main px-2 py-1 rounded text-white fw-bold d-block">必須</span>
+              <%= form.label :画像アップロード, class:"" %>
+            </div>
+            <div class="mt-3 px-4">
+              <button class="btn btn-white border border-dark">ファイルを選択</button>
+              <%= form.file_field :image, class: "d-none" %>
+              <div class="mt-2">
+                <small>※000kb以内のjpg.png画像</small>
+              </div>
+              <div class="mt-4">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="aspect-1 bg-secondary p-4 d-flex justify-content-center align-items-center" style="width: 150px">
+                    <i class="fa fa-image fa-3x"></i>
+                  </div>
+                  <div class="aspect-1 bg-secondary p-4 d-flex justify-content-center align-items-center" style="width: 150px">
+                    <i class="fa fa-image fa-3x"></i>
+                  </div>
+                  <div class="aspect-1 bg-secondary p-4 d-flex justify-content-center align-items-center" style="width: 150px">
+                    <i class="fa fa-image fa-3x"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-3">
+                <small>※最大3枚まで</small>
+              </div>
+            </div>
+          </div>
+          <div class="actions d-flex justify-content-center mx-auto gap-5 flex-column mt-5" style="max-width: 350px;">
+            <button class="btn btn-lg bg-light-cyan text-white fw-bold ">他のペットを追加する</button>
+            <button class="btn btn-lg bg-main text-white fw-bold ">入力内容を確認する</button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

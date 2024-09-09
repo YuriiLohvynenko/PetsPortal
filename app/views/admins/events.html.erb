@@ -1,0 +1,33 @@
+<div class="container m-3">
+    <div class="row">
+        <div class="col-3">
+        <%= render partial: "sidebar" %>
+        </div>
+        <div class= "col-9">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>イベント名</th>
+                    <th>主催者</th>
+                    <th>コミュニティ名</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% @events.each do |event| %>
+                    <tr>
+                    <td><%= event.title %></td>
+                    <td><%= event.user.name %></td>
+                    <td><%= event.community.title %></td>
+                    <td>
+                        <a href="<%= community_event_path(event.community, event) %>" class="btn btn-primary">詳細</a>
+                        <a href="<%= edit_community_event_path(event.community, event) %>" class="btn btn-warning">編集</a>
+                        <a href="<%= community_event_path(event.community, event) %>" data-confirm="Are you sure?" data-method="delete" class="btn btn-danger">削除</a>
+                    </td>
+                    </tr>
+                <% end %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

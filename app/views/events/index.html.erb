@@ -1,0 +1,94 @@
+<h2 class="text-center mt-5"><%= @community.title %>のイベント</h2>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12 col-lg-3">
+          <%= render "shared/sidebar" %>
+        </div>
+
+        <div class="col-12 col-lg-9 events">
+            <% if community_member(@community) || current_user ==(@community) %>
+                <div class="row">
+                    <div class="col-12">
+                        <%= link_to "イベントを作成する", new_community_event_path(@community), class:"btn btn-primary mb-3"  %>
+                    </div>
+                </div>
+            <% end %>
+
+            <div class="row border">
+                <div class="row mt-2">
+                    <div class="col-5 col-md-3 m-1">
+                        <%= form_tag(community_events_path(@community), method: :get) do %>
+                            <%= text_field_tag(:query, params[:query], class: "form-control", placeholder: "検索") %>
+                    </div>
+
+                    <div class="col-5 col-md-2 m-1">
+                        <%= submit_tag "検索", class: "btn btn-warning" %>
+                        <% end %>
+                    </div>
+
+                    <div class="col-5 col-md-4 m-1 overlay">
+                        <%= form_tag(community_events_path(@community), method: :get) do %>
+                            <button type="button" class="btn btn-primary" id="filterButton">検索条件変更</button>
+                            <div id="filterBox" class="border" style="display: none;">
+                                <div class="form-group">
+                                    <label for="Date">日時:</label>
+                                    <%= date_field_tag(:start_date, params[:start_date], class: "form-control", placeholder: "From") %>
+                                    <%= date_field_tag(:end_date, params[:end_date], class: "form-control", placeholder: "To") %>
+                                </div>
+                                <div class="form-group">
+                                    <label for="placeSelect">場所:</label>
+                                    <%= text_field_tag(:place, params[:place], class: "form-control", placeholder: "Place") %>
+                                </div>
+                                <div class="form-group">
+                                    <label for="orderBySelect">並び替え:</label>
+                                    <%= select_tag(:order_by, options_for_select([["選択", ""], ["更新日", "updated_date"], ["イベント日", "event_date"], ["参加者数", "participants"]], params[:order_by]), class: "form-select", id: "orderBySelect") %>
+                                </div>
+
+                                <div class="text-end">
+                                    <%= button_tag(type: :submit, class: "btn btn-sm btn-primary") do %>
+                                        適用する
+                                    <% end %>
+                                </div>
+                            </div>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-12 m-1">
+                <p>イベントの検索結果：<%= @events.size %>件</p>
+            </div>
+
+            <div class="row row-cols-1 row-cols-lg-4 m-0 p-0">
+                <% @events.each do |event| %>
+                    <div class="col-12 col-md-12 m-1">
+                        <div class="card mb-4">
+                            <% if event.image.attached? %>
+                                <img src="<%= url_for(event.image) %>" class="card-img-top" style="width: 200px; height: 200px;" alt="...">
+                            <% end %>
+                            <div class="card-body">
+                                <h5 class="card-title"><%= link_to event.title, community_event_path(@community, event) %></h5>
+                                <p class="card-text"><%= truncate(event.details, length: 100) %></p>
+                                <p class="card-text">開催場所: <%= event.event_place %></p>
+                                <p class="card-text">開催日時: <%= event.event_date %></p>
+                                <p class="card-text">定員: <%= event.people_limit %></p>
+                                <p class="card-text">主催者: <%= display_pet_or_username(event.user) %></p>
+
+                                <% if current_user == event.user %>
+                                    <%= link_to '削除', community_event_path(@community, event), method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger mr-2" %>
+                                    <%= link_to '編集', edit_community_event_path(@community, event), class:"btn btn-success mr-2" %>
+                                <% end %>
+
+                                <% if current_user %>
+                                    <%= link_to '退出する', community_event_unlike_path(@community, event), method: :delete, id: "event-unlike-#{event.id}", class: 'btn btn-danger', style: "display: #{current_user.likes?(event) ? 'block' : 'none'}", remote: true %>
+                                    <%= link_to '参加する', community_event_like_path(@community, event), method: :post, id: "event-like-#{event.id}", class: 'btn btn-primary', style: "display: #{current_user.likes?(event) ? 'none' : 'block'}", remote: true %>
+                                <% end %>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>
